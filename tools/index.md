@@ -36,20 +36,16 @@ title: Tools
       <p>A calm checklist to note anxiety-related experiences that feel familiar to you.</p>
     </li>
     <li class="summary-card">
-      <h3><a href="{{ '/tools/fear-hierarchy/' | relative_url }}">Fear Hierarchy</a></h3>
-      <p>Organises feared situations into an order you define, without pressure to progress.</p>
+      <h3><a href="{{ '/tools/paradoxical-cost-benefit-analysis/' | relative_url }}">Paradoxical Cost–Benefit Analysis</a></h3>
+      <p>Lists advantages of holding onto a thought or habit, without pressure to change.</p>
     </li>
     <li class="summary-card">
-      <h3><a href="{{ '/tools/exposure-log/' | relative_url }}">Exposure Log</a></h3>
-      <p>Records observations during an exposure session, independent of outcomes.</p>
+      <h3><a href="{{ '/tools/fear-hierarchy/' | relative_url }}">Fear Hierarchy</a></h3>
+      <p>Organises feared situations into an order you define, saved locally.</p>
     </li>
     <li class="summary-card">
       <h3><a href="{{ '/tools/phobia-log/' | relative_url }}">Phobia Log (Session Summary)</a></h3>
       <p>Summarises a single exposure attempt with start/end feelings noted.</p>
-    </li>
-    <li class="summary-card">
-      <h3><a href="{{ '/tools/relapse-awareness-log/' | relative_url }}">Relapse Awareness Log</a></h3>
-      <p>Normalizes setbacks by noting events, emotions, and helpful reflections.</p>
     </li>
   </ul>
 </section>
