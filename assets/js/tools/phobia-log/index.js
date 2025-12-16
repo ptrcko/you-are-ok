@@ -2,6 +2,12 @@ import { createLocalId } from '../shared/ids.js';
 
 const STORAGE_KEY = 'phobia-log-entries';
 
+function formatTimestamp(value) {
+  if (!value) return 'Saved time not recorded';
+  const date = new Date(value);
+  return `Saved ${date.toLocaleDateString()} ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+}
+
 function getEntries() {
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
@@ -62,13 +68,17 @@ function renderEntries(container, entries, callbacks) {
     const date = entry.sessionDate ? new Date(entry.sessionDate).toLocaleDateString() : 'No date set';
     meta.textContent = `${date} · ${entry.timeSpent || 'No duration noted'}`;
 
+    const savedAt = document.createElement('p');
+    savedAt.className = 'hint';
+    savedAt.textContent = formatTimestamp(entry.savedAt);
+
     const anxiety = document.createElement('p');
     anxiety.textContent = `Anxiety: start ${formatPercent(entry.anxietyStart)} → end ${formatPercent(entry.anxietyEnd)}`;
 
     const thoughts = document.createElement('p');
     thoughts.textContent = entry.thoughts ? `Frightening thoughts: ${entry.thoughts}` : 'Frightening thoughts: (not recorded)';
 
-    card.append(header, meta, anxiety, thoughts);
+    card.append(header, meta, savedAt, anxiety, thoughts);
     container.appendChild(card);
   });
 }
