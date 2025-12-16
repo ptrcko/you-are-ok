@@ -3,45 +3,61 @@ layout: default
 title: Thought Record
 ---
 
-<section>
+<section class="tool-header">
   <h2>Thought Record</h2>
-  <p>This tool gathers the context around a distressing thought so you can revisit it later.</p>
-  <p class="notice">Purpose: capture situations, automatic thoughts, feelings, and optional follow-up ideas without judgement.</p>
+  <p class="intro">Capture the situation, automatic thought, and any evidence you want to revisit later.</p>
+  <div class="microcopy">
+    <p>Fields marked required need text before saving.</p>
+    <p>Entries stay on this device and can be reopened or deleted.</p>
+  </div>
+</section>
+
+<section class="form-first">
+  <h2>New record</h2>
+  <form id="thought-record-form">
+    <label for="situation">Situation <span aria-hidden="true">(required)</span></label>
+    <textarea id="situation" name="situation" rows="3" required></textarea>
+    <p class="hint">Where you were, who was there, and what was happening.</p>
+
+    <label for="automaticThought">Automatic thought <span aria-hidden="true">(required)</span></label>
+    <textarea id="automaticThought" name="automaticThought" rows="3" required></textarea>
+    <p class="hint">Write the thought exactly as it showed up.</p>
+
+    <label for="feelings">Feelings (optional)</label>
+    <textarea id="feelings" name="feelings" rows="2"></textarea>
+
+    <label for="supportingEvidence">Supporting evidence (optional)</label>
+    <textarea id="supportingEvidence" name="supportingEvidence" rows="2"></textarea>
+
+    <label for="contradictingEvidence">Contradicting evidence (optional)</label>
+    <textarea id="contradictingEvidence" name="contradictingEvidence" rows="2"></textarea>
+
+    <label for="balancedResponse">Balanced response or next step (optional)</label>
+    <textarea id="balancedResponse" name="balancedResponse" rows="2"></textarea>
+
+    <div class="form-actions">
+      <button type="submit">Save locally</button>
+      <button type="button" id="cancel-edit" class="secondary" hidden>Cancel edit</button>
+      <p id="form-status" class="form-status" aria-live="polite"></p>
+    </div>
+  </form>
+</section>
+
+<section class="supporting">
+  <details class="collapsible" aria-label="How this page works">
+    <summary>How this page works</summary>
+    <ul>
+      <li>Save at any point; you do not have to fill every field.</li>
+      <li>Editing replaces the saved copy on this device only.</li>
+      <li>Deleting removes the entry from local storage.</li>
+    </ul>
+  </details>
 </section>
 
 <section>
-  <h2>How to use it</h2>
-  <ol>
-    <li>Note the situation: what was happening, who was there, and when it occurred.</li>
-    <li>Write the automatic thought in your own words. Keep it brief and honest.</li>
-    <li>List the feelings that came up and rate their intensity if that helps you.</li>
-    <li>Identify any evidence that supports the thought.</li>
-    <li>Add evidence that does not support the thought or offers alternative perspectives.</li>
-    <li>End with a balanced response or next-step idea, even if it is a simple reassurance.</li>
-  </ol>
+  <h2>Saved thought records</h2>
+  <p class="notice">Entries are stored in your browser only and never sent to a server.</p>
+  <div id="entries"></div>
 </section>
 
-<section>
-  <h2>Suggested structure</h2>
-  <ul>
-    <li><strong>Situation</strong>: a short description plus time/date.</li>
-    <li><strong>Automatic thought</strong>: the exact wording that ran through your mind.</li>
-    <li><strong>Feelings</strong>: emotions and physical sensations you noticed.</li>
-    <li><strong>Supporting evidence</strong>: observations that seem to back up the thought.</li>
-    <li><strong>Contradicting evidence</strong>: details that weaken the thought or point elsewhere.</li>
-    <li><strong>Balanced response</strong>: a kinder or more nuanced statement to carry forward.</li>
-  </ul>
-</section>
-
-<section>
-  <h2>What it is not for</h2>
-  <ul>
-    <li>Scoring, ranking, or validating thoughts.</li>
-    <li>Replacing professional advice or forcing reinterpretations.</li>
-  </ul>
-</section>
-
-<section>
-  <h2>Status</h2>
-  <p>This page now outlines the full structure of a thought record. Input fields and storage will be added in a later implementation phase.</p>
-</section>
+<script type="module" src="{{ '/assets/js/tools/thought-record/index.js' | relative_url }}"></script>
