@@ -4,24 +4,21 @@ title: Home
 ---
 
 <section>
-  <h2>Welcome</h2>
-  <p>This site is a structured private notebook. Everything stays on your device and is meant to be calm, direct, and free of external dependencies.</p>
-  <p class="status-note">You can leave fields empty. There are no prompts, alerts, or timers.</p>
+  <h2>A quiet reference library</h2>
+  <p>You Are OK is an open, neutral catalogue of CBT and TEAM-CBT tools. It is designed to be calm, privacy-first, and free of nudges toward any single path.</p>
+  <p class="notice">Everything here is static and local. There is no account system, no storage, and no data capture in this step.</p>
 </section>
 
 <section>
-  <h2>Data foundation</h2>
-  <p>The app creates a single root data object that follows the shared schema. It is saved locally and reused when you return.</p>
-  <div class="button-row">
-    <button type="button" id="reset-data">Reset to fresh data</button>
-    <button type="button" id="refresh-view">Refresh view</button>
-  </div>
-  <p class="status-note" id="data-status" aria-live="polite"></p>
-  <h3>Current stored object</h3>
-  <pre id="data-dump" aria-live="polite"></pre>
+  <h2>Explore the tools</h2>
+  <p>Browse the available tools at your own pace. Each entry includes a concise purpose statement and a placeholder page describing what it is (and what it is not).</p>
+  <ul>
+    <li><a href="{{ '/tools/' | relative_url }}">View the tools index</a></li>
+  </ul>
 </section>
 
 <section>
-  <h2>Upcoming exercises</h2>
-  <p>Exercises will appear here after the foundational storage and state layers are in place. There are no scores or interpretations, only structured entries that you control.</p>
+  <h2>Why this layer exists</h2>
+  <p>This navigation layer completes Step 1 of the project plan: discovery without implementation. It helps you see what is available before any data handling or exercise logic exists.</p>
+  <p class="status-note">Future steps will add optional, user-controlled data entry. Those pieces are intentionally absent here to keep this stage focused on structure and clarity.</p>
 </section>
