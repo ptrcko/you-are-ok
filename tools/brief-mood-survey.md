@@ -56,11 +56,11 @@ title: Brief Mood Survey
 </section>
 
 <section>
-  <h2>Implementation notes</h2>
+  <h2>Privaccy</h2>
   <ul>
-    <li><strong>Storage module:</strong> <code>assets/js/storage.js</code> keeps the single data container for the whole app and exposes a typed entry store so tools only read and write their own records.</li>
-    <li><strong>Tool module shape:</strong> <code>assets/js/tools/brief-mood-survey/</code> contains a small module per concern (<code>data.js</code> for parsing and persistence, <code>ui.js</code> for rendering, <code>controller.js</code> for event wiring, <code>index.js</code> as the entry point). Copying this folder and swapping the data schema is enough to start a new tool.</li>
-    <li><strong>Scalability:</strong> The UI, interaction logic, and storage access are separated so new tools can reuse the pattern without changing global code.</li>
+    <li>Entries never leave this device; <code>assets/js/storage.js</code> writes to local storage only.</li>
+    <li>Each tool reads and writes its own records through the typed entry store in <code>assets/js/storage.js</code> so data stays scoped.</li>
+    <li>The survey’s modules in <code>assets/js/tools/brief-mood-survey/</code> handle parsing, UI, and event wiring without sending data to a server.</li>
   </ul>
 </section>
 
