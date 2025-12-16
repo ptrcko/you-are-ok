@@ -32,6 +32,10 @@ title: Tools
       <p>Balances advantages and disadvantages of a belief or behaviour without scoring.</p>
     </li>
     <li class="summary-card">
+      <h3><a href="{{ '/tools/anxiety-profile/' | relative_url }}">Anxiety Profile (Self-Reflection Checklist)</a></h3>
+      <p>A calm checklist to note anxiety-related experiences that feel familiar to you.</p>
+    </li>
+    <li class="summary-card">
       <h3><a href="{{ '/tools/fear-hierarchy/' | relative_url }}">Fear Hierarchy</a></h3>
       <p>Organises feared situations into an order you define, without pressure to progress.</p>
     </li>

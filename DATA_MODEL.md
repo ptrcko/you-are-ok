@@ -285,7 +285,28 @@ Rules:
 
 ---
 
-## 13. Settings Block
+## 13. Anxiety Profile (Self-Reflection Checklist)
+
+```json
+{
+  "id": "uuid",
+  "type": "anxiety_profile",
+  "createdAt": "ISO-8601",
+  "updatedAt": "ISO-8601",
+  "selectedItems": ["experience_id"],
+  "notes": "optional"
+}
+```
+
+Rules:
+
+* Stores only chosen identifiers and optional notes
+* No scores, counts, or interpretations are recorded
+* Saved data remains local to the device
+
+---
+
+## 14. Settings Block
 
 ```json
 {
