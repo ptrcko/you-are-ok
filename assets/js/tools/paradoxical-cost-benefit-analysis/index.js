@@ -2,6 +2,12 @@ import { createLocalId } from '../shared/ids.js';
 
 const STORAGE_KEY = 'paradoxical-cba-entries';
 
+function formatTimestamp(value) {
+  if (!value) return 'Saved time not recorded';
+  const date = new Date(value);
+  return `Saved ${date.toLocaleDateString()} ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+}
+
 function getEntries() {
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
@@ -73,7 +79,11 @@ function renderEntries(container, entries, callbacks) {
     const notes = document.createElement('p');
     notes.textContent = entry.notes ? `Notes: ${entry.notes}` : 'Notes: (not recorded)';
 
-    card.append(header, advantages, notes);
+    const savedAt = document.createElement('p');
+    savedAt.className = 'hint';
+    savedAt.textContent = formatTimestamp(entry.savedAt);
+
+    card.append(header, savedAt, advantages, notes);
     container.appendChild(card);
   });
 }

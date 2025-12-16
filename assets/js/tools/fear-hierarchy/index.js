@@ -3,6 +3,12 @@ import { createLocalId } from '../shared/ids.js';
 const STORAGE_KEY = 'fear-hierarchy-entries';
 const LEVEL_COUNT = 10;
 
+function formatTimestamp(value) {
+  if (!value) return 'Saved time not recorded';
+  const date = new Date(value);
+  return `Saved ${date.toLocaleDateString()} ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+}
+
 function getEntries() {
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
@@ -84,6 +90,10 @@ function renderEntries(listEl, entries, callbacks) {
     const description = document.createElement('p');
     description.textContent = 'Levels from least to most frightening:';
 
+    const saved = document.createElement('p');
+    saved.className = 'hint';
+    saved.textContent = formatTimestamp(entry.savedAt);
+
     const list = document.createElement('ol');
     list.className = 'hierarchy-list';
     const sortedLevels = [...entry.levels].sort((a, b) => a.level - b.level);
@@ -93,7 +103,7 @@ function renderEntries(listEl, entries, callbacks) {
       list.appendChild(li);
     });
 
-    card.append(header, description, list);
+    card.append(header, saved, description, list);
     listEl.appendChild(card);
   });
 }
