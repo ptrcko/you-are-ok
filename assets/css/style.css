@@ -2,7 +2,7 @@
   --bg: #f7f7f5;
   --text: #1f1f1d;
   --accent: #3b5a5e;
-  --muted: #6a6a68;
+  --muted: #5f615f;
   --border: #d7d7d3;
   font-family: "Helvetica", "Arial", sans-serif;
 }
@@ -32,6 +32,7 @@ nav {
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
+  gap: 0.75rem;
 }
 
 .nav-title {
@@ -63,7 +64,7 @@ nav {
 }
 
 main {
-  max-width: 920px;
+  max-width: 960px;
   margin: 0 auto;
   padding: 1.5rem;
 }
@@ -85,34 +86,47 @@ p {
   margin-top: 0;
 }
 
-pre {
+ul {
+  margin-top: 0.25rem;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+  padding: 0;
+  list-style: none;
+}
+
+.summary-card {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem;
+  background: #fafaf7;
+}
+
+.summary-card h3 {
+  margin-top: 0;
+  color: var(--accent);
+  font-size: 1.1rem;
+}
+
+.summary-card a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.summary-card a:focus,
+.summary-card a:hover {
+  text-decoration: underline;
+}
+
+.notice {
   background: #f0f0ec;
   border: 1px solid var(--border);
-  padding: 1rem;
   border-radius: 8px;
-  overflow-x: auto;
-}
-
-.button-row {
-  display: flex;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-}
-
-button {
-  background: var(--accent);
-  color: #ffffff;
-  border: none;
-  padding: 0.6rem 1rem;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.95rem;
-}
-
-button:focus,
-button:hover {
-  outline: 1px solid var(--border);
-  background: #2f474a;
+  padding: 0.9rem;
+  color: var(--muted);
 }
 
 .status-note {
@@ -121,7 +135,7 @@ button:hover {
 }
 
 footer {
-  max-width: 920px;
+  max-width: 960px;
   margin: 0 auto 2rem;
   padding: 0 1.5rem;
   color: var(--muted);
