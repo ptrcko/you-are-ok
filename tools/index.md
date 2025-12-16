@@ -24,6 +24,10 @@ title: Tools
       <p>Helps notice patterns in thinking using a fixed list of distortion definitions.</p>
     </li>
     <li class="summary-card">
+      <h3><a href="{{ '/tools/cognitive-distortions/' | relative_url }}">Cognitive Distortions Log</a></h3>
+      <p>Records a thought, marks relevant distortions, and keeps optional notes for awareness.</p>
+    </li>
+    <li class="summary-card">
       <h3><a href="{{ '/tools/cost-benefit-analysis/' | relative_url }}">Cost–Benefit Analysis</a></h3>
       <p>Balances advantages and disadvantages of a belief or behaviour without scoring.</p>
     </li>
