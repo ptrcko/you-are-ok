@@ -1,3 +1,5 @@
+// Shared storage layer for all tools. Keeps the single data container and
+// provides type-aware helpers so each tool only touches its own entries.
 const STORAGE_KEY = 'you-are-ok:data';
 
 function baseShape(data) {
@@ -92,4 +94,33 @@ export function markEntryDeleted(id) {
 
   saveData(data);
   return data.entries[id];
+}
+
+// Returns a scoped set of helpers for a specific entry type. This protects
+// tools from mutating or reading data that does not belong to them.
+export function createEntryStore(entryType) {
+  return {
+    list() {
+      return listEntriesByType(entryType);
+    },
+
+    get(id) {
+      const entry = getEntry(id);
+      if (!entry || entry.type !== entryType) return null;
+      return entry;
+    },
+
+    save(entry) {
+      const prepared = { ...entry, type: entryType };
+      return upsertEntry(prepared);
+    },
+
+    remove(id) {
+      const existing = getEntry(id);
+      if (!existing || existing.type !== entryType) {
+        return null;
+      }
+      return markEntryDeleted(id);
+    },
+  };
 }
