@@ -3,32 +3,26 @@ layout: default
 title: Cognitive Distortions Log
 ---
 
-<section>
+<section class="tool-header">
   <h2>Cognitive Distortions Log</h2>
-  <p>This tool mirrors Dr. David Burns’ Checklist of Cognitive Distortions to notice patterns in a specific thought.</p>
-  <p class="notice">Purpose: record a thought, mark any distortions that may fit, and keep notes for later awareness. No scoring or fixes are provided.</p>
+  <p class="intro">A quiet place to note a thought and mark any distortions that might fit.</p>
+  <div class="microcopy">
+    <p>You don’t have to fill in every field.</p>
+    <p>You can come back to this later.</p>
+    <p>Nothing here is scored or interpreted.</p>
+  </div>
 </section>
 
-<section>
-  <h2>How to use this page</h2>
-  <ul>
-    <li>Write the thought in your own words.</li>
-    <li>Select one or more distortions from the checklist. The list is read-only reference text.</li>
-    <li>Optionally add notes or reflections.</li>
-    <li>Save to keep the entry on this device. You can reopen, edit, or delete it later.</li>
-  </ul>
-</section>
-
-<section>
+<section class="form-first">
   <h2>New entry</h2>
   <form id="distortion-form">
     <label for="thought">Thought</label>
     <textarea id="thought" name="thought" rows="4" required></textarea>
-    <p class="hint">Free text. Nothing here is interpreted, scored, or shared.</p>
+    <p class="hint">Write it in your own words. Stop whenever you like.</p>
 
     <fieldset>
       <legend>Cognitive distortions checklist</legend>
-      <p class="hint">Select all that seem relevant. The descriptions are neutral reminders, not judgments.</p>
+      <p class="hint">Tap any that seem relevant. The checkbox just marks your selection.</p>
       <div id="distortion-checklist"></div>
     </fieldset>
 
@@ -41,6 +35,18 @@ title: Cognitive Distortions Log
       <p id="form-status" class="form-status" aria-live="polite"></p>
     </div>
   </form>
+</section>
+
+<section class="supporting">
+  <details class="collapsible" aria-label="How this page works">
+    <summary>How this page works</summary>
+    <ul>
+      <li>Write the thought in your own words.</li>
+      <li>Select one or more distortions from the checklist. The list is read-only reference text.</li>
+      <li>Optionally add notes or reflections.</li>
+      <li>Save to keep the entry on this device. You can reopen, edit, or delete it later.</li>
+    </ul>
+  </details>
 </section>
 
 <section>
