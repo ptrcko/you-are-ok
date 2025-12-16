@@ -1,0 +1,8 @@
+# Basic site configuration for offline-friendly Jekyll build
+name: You Are OK
+baseurl: ""
+url: ""
+title: "You Are OK"
+description: "Structured private notebook"
+markdown: kramdown
+permalink: pretty
