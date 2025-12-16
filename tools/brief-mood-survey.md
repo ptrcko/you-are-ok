@@ -58,10 +58,10 @@ title: Brief Mood Survey
 <section>
   <h2>Implementation notes</h2>
   <ul>
-    <li><strong>Storage module:</strong> <code>assets/js/storage.js</code> is a single, inspectable layer that keeps the shared data container, applies schema metadata, and saves entries to <code>localStorage</code> on explicit actions only.</li>
-    <li><strong>Interaction module:</strong> <code>assets/js/brief-mood-survey.js</code> handles parsing inputs, calculating totals, and rendering the list without touching storage directly.</li>
-    <li><strong>Scalability:</strong> Each tool can reuse the storage module and add its own interaction file, keeping UI, state changes, and persistence clearly separated.</li>
+    <li><strong>Storage module:</strong> <code>assets/js/storage.js</code> keeps the single data container for the whole app and exposes a typed entry store so tools only read and write their own records.</li>
+    <li><strong>Tool module shape:</strong> <code>assets/js/tools/brief-mood-survey/</code> contains a small module per concern (<code>data.js</code> for parsing and persistence, <code>ui.js</code> for rendering, <code>controller.js</code> for event wiring, <code>index.js</code> as the entry point). Copying this folder and swapping the data schema is enough to start a new tool.</li>
+    <li><strong>Scalability:</strong> The UI, interaction logic, and storage access are separated so new tools can reuse the pattern without changing global code.</li>
   </ul>
 </section>
 
-<script type="module" src="{{ '/assets/js/brief-mood-survey.js' | relative_url }}"></script>
+<script type="module" src="{{ '/assets/js/tools/brief-mood-survey/index.js' | relative_url }}"></script>
