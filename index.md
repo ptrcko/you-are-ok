@@ -5,13 +5,13 @@ title: Tools
 
 <section>
   <h2>Tools library</h2>
-  <p>You Are OK is a calm, neutral catalogue of CBT and TEAM-CBT tools. The home page now opens directly to the library so you can explore without extra steps.</p>
+  <p>You Are OK now opens directly to the tools library so you can jump straight into the exercises.</p>
   <p class="notice">Everything here is static and local. There is no account system, storage, or data capture in this stage.</p>
 </section>
 
 <section>
   <h2>Available tools</h2>
-  <p>Browse each entry to see a concise purpose statement and a placeholder description of what the tool is (and is not).</p>
+  <p>Browse each entry to see a concise purpose statement and a calm description of how the tool is meant to be used.</p>
   <ul class="summary-grid">
     <li class="summary-card">
       <h3><a href="{{ '/tools/brief-mood-survey/' | relative_url }}">Brief Mood Survey</a></h3>
@@ -34,12 +34,16 @@ title: Tools
       <p>Balances advantages and disadvantages of a belief or behaviour without scoring.</p>
     </li>
     <li class="summary-card">
+      <h3><a href="{{ '/tools/paradoxical-cost-benefit-analysis/' | relative_url }}">Paradoxical Cost–Benefit Analysis</a></h3>
+      <p>Lists advantages of holding onto a thought or habit, without pressure to change.</p>
+    </li>
+    <li class="summary-card">
       <h3><a href="{{ '/tools/anxiety-profile/' | relative_url }}">Anxiety Profile (Self-Reflection Checklist)</a></h3>
       <p>A calm checklist to note anxiety-related experiences that feel familiar to you.</p>
     </li>
     <li class="summary-card">
       <h3><a href="{{ '/tools/fear-hierarchy/' | relative_url }}">Fear Hierarchy</a></h3>
-      <p>Organises feared situations into an order you define, without pressure to progress.</p>
+      <p>Organises feared situations into an order you define, saved locally.</p>
     </li>
     <li class="summary-card">
       <h3><a href="{{ '/tools/exposure-log/' | relative_url }}">Exposure Log</a></h3>
