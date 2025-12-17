@@ -9,7 +9,7 @@ title: Tools
     <h1 class="hero-title">A calm library of gentle mental health tools.</h1>
     <p class="hero-subtitle">Everything is local, private, and designed to feel reassuring on any screen. Choose a tool when you're ready, or simply browse to see what feels supportive today.</p>
     <div class="hero-actions">
-      <a class="cta" href="{{ '/tools/' | relative_url }}">Open the tools</a>
+      <a class="cta" href="#tools">Open the tools</a>
       <a class="cta secondary" href="#comfort">See how it feels</a>
       <span class="pill-badge">No logins · No tracking · Just you</span>
     </div>
@@ -38,7 +38,7 @@ title: Tools
 </section>
 
 <section>
-  <h2>Available tools</h2>
+  <h2 id="tools">Available tools</h2>
   <p>Browse each entry to see a concise purpose statement and a calm description of how the tool is meant to be used.</p>
   <ul class="summary-grid">
     <li class="summary-card">
