@@ -54,6 +54,12 @@ title: Tools
       </a>
     </li>
     <li>
+      <a class="summary-card" href="{{ '/tools/story/' | relative_url }}">
+        <h3>Story</h3>
+        <p>Offers a calm space to write a poem, story, or personal history without judgment.</p>
+      </a>
+    </li>
+    <li>
       <a class="summary-card" href="{{ '/tools/cognitive-distortion-identification/' | relative_url }}">
         <h3>Cognitive Distortion Identification</h3>
         <p>Helps notice patterns in thinking using a fixed list of distortion definitions.</p>
