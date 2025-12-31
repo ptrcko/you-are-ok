@@ -5,7 +5,7 @@ title: Catastrophising Check-In
 
 <section class="tool-header">
   <h2>Catastrophising Check-In</h2>
-  <p class="intro">Note a future-focused thought, pause briefly, and return to the same question over time at your own pace.</p>
+  <p class="intro">Note a future-focused thought, pause briefly, and return to the same question over time.</p>
   <div class="microcopy">
     <p>Entries stay on this device only.</p>
     <p>Responses can be short or empty; the goal is gentle awareness.</p>
@@ -40,8 +40,8 @@ title: Catastrophising Check-In
     <summary>How this page works</summary>
     <ul>
       <li>Enter the thought as-is. Context is optional.</li>
-      <li>Saving offers check-ins at 15 minutes, 1 hour, and 4 hours. Each one simply asks if you'd like to check in now.</li>
-      <li>If you add an outcome date, the same question repeats on that date. Each step is optional.</li>
+      <li>Saving creates check-ins at 15 minutes, 1 hour, and 4 hours with the same question.</li>
+      <li>If you add an outcome date, the same question repeats on that date.</li>
       <li>You can edit the thought or add evidence later; everything stays in your browser.</li>
     </ul>
   </details>

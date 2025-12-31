@@ -32,20 +32,6 @@ function formatTimestamp(value) {
   return `${date.toLocaleDateString()} ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
 }
 
-function evidenceIndicatesAffirmation(evidence) {
-  if (!evidence) return false;
-  const text = evidence.toLowerCase();
-  return (
-    text.includes("was wrong") ||
-    text.includes("didn't happen") ||
-    text.includes('did not happen') ||
-    text.includes("wasn't as bad") ||
-    text.includes('not as bad') ||
-    text.includes('ok now') ||
-    text.includes('okay now')
-  );
-}
-
 function renderCheckIn(entry, checkIn, onSaveEvidence) {
   const wrapper = document.createElement('div');
   wrapper.className = 'check-in-block';
@@ -64,49 +50,25 @@ function renderCheckIn(entry, checkIn, onSaveEvidence) {
 
   wrapper.appendChild(header);
 
-  const invitation = document.createElement('p');
-  invitation.className = 'item-heading';
-  invitation.textContent = 'Would you like to check in now?';
-  wrapper.appendChild(invitation);
-
-  const choiceRow = document.createElement('div');
-  choiceRow.className = 'entry-actions';
-
-  const startButton = document.createElement('button');
-  startButton.type = 'button';
-  startButton.textContent = 'Check in now';
-
-  const deferButton = document.createElement('button');
-  deferButton.type = 'button';
-  deferButton.className = 'secondary';
-  deferButton.textContent = 'Not now';
-
-  choiceRow.appendChild(startButton);
-  choiceRow.appendChild(deferButton);
-
-  const content = document.createElement('div');
-  content.className = 'check-in-content';
-  content.hidden = !checkIn.evidence;
-
   const thoughtLabel = document.createElement('p');
   thoughtLabel.className = 'item-heading';
   thoughtLabel.textContent = 'Original thought';
-  content.appendChild(thoughtLabel);
+  wrapper.appendChild(thoughtLabel);
 
   const thought = document.createElement('p');
   thought.textContent = entry.thought;
-  content.appendChild(thought);
+  wrapper.appendChild(thought);
 
   const question = document.createElement('p');
   question.className = 'item-heading';
   question.textContent = 'What evidence do you have that this thought is correct?';
-  content.appendChild(question);
+⁹  wrapper.appendChild(question);
 
   const response = document.createElement('textarea');
   response.rows = 3;
   response.value = checkIn.evidence || '';
   response.ariaLabel = 'Evidence';
-  content.appendChild(response);
+  wrapper.appendChild(response);
 
   const actions = document.createElement('div');
   actions.className = 'entry-actions';
@@ -125,27 +87,7 @@ function renderCheckIn(entry, checkIn, onSaveEvidence) {
     actions.appendChild(saved);
   }
 
-  content.appendChild(actions);
-
-  const affirmationNeeded = evidenceIndicatesAffirmation(checkIn.evidence || response.value);
-  if (affirmationNeeded) {
-    const affirmation = document.createElement('p');
-    affirmation.className = 'notice';
-    affirmation.textContent = 'Noticing that matters. Thank you for checking in.';
-    content.appendChild(affirmation);
-  }
-
-  startButton.addEventListener('click', () => {
-    content.hidden = false;
-    response.focus();
-  });
-
-  deferButton.addEventListener('click', () => {
-    content.hidden = true;
-  });
-
-  wrapper.appendChild(choiceRow);
-  wrapper.appendChild(content);
+  wrapper.appendChild(actions);
 
   return wrapper;
 }
