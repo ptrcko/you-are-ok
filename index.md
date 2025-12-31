@@ -54,6 +54,12 @@ title: Tools
       </a>
     </li>
     <li>
+      <a class="summary-card" href="{{ '/tools/catastrophising-check-in/' | relative_url }}">
+        <h3>Catastrophising Check-In</h3>
+        <p>Holds a future-focused thought and invites gentle, timed evidence gathering.</p>
+      </a>
+    </li>
+    <li>
       <a class="summary-card" href="{{ '/tools/story/' | relative_url }}">
         <h3>Story</h3>
         <p>Offers a calm space to write a poem, story, or personal history without judgment.</p>
