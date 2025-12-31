@@ -32,12 +32,14 @@ export function initCatastrophisingCheckIn() {
         refreshList();
       },
       onSaveEvidence(entryId, checkInId, evidence) {
+        const entry = loadEntry(entryId);
+        const checkInLabel = entry?.checkIns?.find((item) => item.id === checkInId)?.label || 'Check-in';
         const updated = saveCheckInEvidence(entryId, checkInId, evidence);
         if (!updated) {
           setStatus(statusEl, 'Unable to save check-in.');
           return;
         }
-        setStatus(statusEl, 'Check-in saved.');
+        setStatus(statusEl, `${checkInLabel} saved.`);
         refreshList();
       },
     });
