@@ -62,7 +62,7 @@ function renderCheckIn(entry, checkIn, onSaveEvidence) {
   const question = document.createElement('p');
   question.className = 'item-heading';
   question.textContent = 'What evidence do you have that this thought is correct?';
-  wrapper.appendChild(question);
+⁹  wrapper.appendChild(question);
 
   const response = document.createElement('textarea');
   response.rows = 3;
