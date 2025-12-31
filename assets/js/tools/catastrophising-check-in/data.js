@@ -5,9 +5,9 @@ const ENTRY_TYPE = 'catastrophising_check_in';
 const store = createEntryStore(ENTRY_TYPE);
 
 const BASE_CHECK_INS = [
-  { label: '15 minutes', minutes: 15 },
-  { label: '1 hour', minutes: 60 },
-  { label: '4 hours', minutes: 240 },
+  { label: '15-minute check-in', minutes: 15 },
+  { label: '1-hour check-in', minutes: 60 },
+  { label: '4-hour check-in', minutes: 240 },
 ];
 
 function toIso(date) {
@@ -56,10 +56,10 @@ function applyOutcomeDate(checkIns, outcomeDate) {
   const existingOutcome = checkIns.find((checkIn) => checkIn.category === 'outcome');
 
   const outcomeCheckIn = existingOutcome
-    ? { ...existingOutcome, promptAt: isoDate, label: 'Outcome date' }
+    ? { ...existingOutcome, promptAt: isoDate, label: 'Outcome check-in' }
     : {
         id: createLocalId(),
-        label: 'Outcome date',
+        label: 'Outcome check-in',
         promptAt: isoDate,
         category: 'outcome',
         evidence: '',

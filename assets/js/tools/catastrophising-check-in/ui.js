@@ -32,19 +32,30 @@ function formatTimestamp(value) {
   return `${date.toLocaleDateString()} ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
 }
 
+function getCheckInTone(label) {
+  const normalised = (label || '').toLowerCase();
+  if (normalised.includes('15')) return 'check-in-early';
+  if (normalised.includes('1-hour')) return 'check-in-mid';
+  if (normalised.includes('4-hour')) return 'check-in-late';
+  if (normalised.includes('outcome')) return 'check-in-outcome';
+  return 'check-in-generic';
+}
+
 function renderCheckIn(entry, checkIn, onSaveEvidence) {
-  const wrapper = document.createElement('div');
-  wrapper.className = 'check-in-block';
+  const wrapper = document.createElement('article');
+  const tone = getCheckInTone(checkIn.label);
+  wrapper.className = `check-in-card ${tone}`;
 
   const header = document.createElement('div');
-  header.className = 'entry-header';
+  header.className = 'check-in-card__header';
+
   const label = document.createElement('p');
-  label.className = 'entry-title';
-  label.textContent = checkIn.label;
+  label.className = 'check-in-title';
+  label.textContent = checkIn.label || 'Check-in';
   header.appendChild(label);
 
   const when = document.createElement('p');
-  when.className = 'hint';
+  when.className = 'check-in-meta';
   when.textContent = `Planned for ${formatTimestamp(checkIn.promptAt)}`;
   header.appendChild(when);
 
@@ -62,12 +73,12 @@ function renderCheckIn(entry, checkIn, onSaveEvidence) {
   const question = document.createElement('p');
   question.className = 'item-heading';
   question.textContent = 'What evidence do you have that this thought is correct?';
-⁹  wrapper.appendChild(question);
+  wrapper.appendChild(question);
 
   const response = document.createElement('textarea');
   response.rows = 3;
   response.value = checkIn.evidence || '';
-  response.ariaLabel = 'Evidence';
+  response.setAttribute('aria-label', `${checkIn.label || 'Check-in'} evidence`);
   wrapper.appendChild(response);
 
   const actions = document.createElement('div');
