@@ -24,7 +24,7 @@ title: Catastrophising Check-In
     <textarea id="context" name="context" rows="2"></textarea>
 
     <label for="outcomeDate">Outcome date (optional)</label>
-    <input id="outcomeDate" name="outcomeDate" type="date" />
+    <input id="outcomeDate" name="outcomeDate" type="date" class="date-input" />
     <p class="hint">Adds a repeat of the same question on that date.</p>
 
     <div class="form-actions">

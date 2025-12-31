@@ -28,19 +28,38 @@ function createScheduledCheckIns(createdAt) {
     promptAt: toIso(addMinutes(anchor, item.minutes)),
     category: 'scheduled',
     evidence: '',
+    evidenceAnswer: null,
+    evidenceNote: '',
   }));
 }
 
 function ensureCheckIns(existingCheckIns, createdAt) {
   if (Array.isArray(existingCheckIns) && existingCheckIns.length) {
-    return existingCheckIns.map((checkIn) => ({
-      id: checkIn.id || createLocalId(),
-      label: checkIn.label || 'Check-in',
-      promptAt: checkIn.promptAt ? toIso(checkIn.promptAt) : toIso(createdAt || new Date()),
-      category: checkIn.category || 'scheduled',
-      evidence: typeof checkIn.evidence === 'string' ? checkIn.evidence : '',
-      recordedAt: checkIn.recordedAt,
-    }));
+    return existingCheckIns.map((checkIn) => {
+      const storedEvidence = typeof checkIn.evidence === 'string' ? checkIn.evidence.trim() : '';
+      const storedEvidenceNoteRaw =
+        typeof checkIn.evidenceNote === 'string'
+          ? checkIn.evidenceNote
+          : storedEvidence;
+      const storedEvidenceNote = storedEvidenceNoteRaw.trim();
+      const storedAnswer =
+        checkIn.evidenceAnswer === 'yes' || checkIn.evidenceAnswer === 'no'
+          ? checkIn.evidenceAnswer
+          : storedEvidenceNote
+          ? 'yes'
+          : null;
+
+      return {
+        id: checkIn.id || createLocalId(),
+        label: checkIn.label || 'Check-in',
+        promptAt: checkIn.promptAt ? toIso(checkIn.promptAt) : toIso(createdAt || new Date()),
+        category: checkIn.category || 'scheduled',
+        evidence: storedEvidence,
+        evidenceAnswer: storedAnswer,
+        evidenceNote: storedAnswer === 'yes' ? storedEvidenceNote : '',
+        recordedAt: checkIn.recordedAt,
+      };
+    });
   }
 
   return createScheduledCheckIns(createdAt);
@@ -63,6 +82,8 @@ function applyOutcomeDate(checkIns, outcomeDate) {
         promptAt: isoDate,
         category: 'outcome',
         evidence: '',
+        evidenceAnswer: null,
+        evidenceNote: '',
       };
 
   return [...withoutOutcome, outcomeCheckIn];
@@ -122,19 +143,24 @@ export function loadEntry(id) {
   return store.get(id);
 }
 
-export function saveCheckInEvidence(entryId, checkInId, evidenceText) {
+export function saveCheckInEvidence(entryId, checkInId, evidenceInput = {}) {
   const entry = loadEntry(entryId);
   if (!entry) return null;
 
-  const cleanEvidence = evidenceText.trim();
+  const evidenceAnswer = evidenceInput.answer === 'yes' || evidenceInput.answer === 'no' ? evidenceInput.answer : null;
+  const evidenceNote = typeof evidenceInput.note === 'string' ? evidenceInput.note.trim() : '';
+  const hasEvidence = Boolean(evidenceAnswer) || Boolean(evidenceNote);
+
   const updated = {
     ...entry,
     checkIns: entry.checkIns.map((checkIn) => {
       if (checkIn.id !== checkInId) return checkIn;
       return {
         ...checkIn,
-        evidence: evidenceText.length ? cleanEvidence : '',
-        recordedAt: new Date().toISOString(),
+        evidence: evidenceAnswer === 'yes' ? evidenceNote : '',
+        evidenceAnswer,
+        evidenceNote: evidenceAnswer === 'yes' ? evidenceNote : '',
+        recordedAt: hasEvidence ? new Date().toISOString() : checkIn.recordedAt,
       };
     }),
   };
