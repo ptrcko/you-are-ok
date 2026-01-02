@@ -483,25 +483,29 @@ button:hover {
 
 .check-in-list {
   display: grid;
-  gap: 0.75rem;
   margin-top: 0.35rem;
+  border-top: 1px solid var(--border);
 }
 
-.check-in-card {
-  border-radius: 12px;
-  padding: 0.9rem 1rem;
-  border: 1px solid var(--border);
-  background: #f7fbfa;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+.check-in-row {
+  display: grid;
+  gap: 0.5rem;
+  padding: 0.85rem 0 0.85rem 0.5rem;
+  border-bottom: 1px solid var(--border);
+  border-left: 4px solid transparent;
+  background: #ffffff;
 }
 
-.check-in-card__header {
+.check-in-row:last-child {
+  border-bottom: none;
+}
+
+.check-in-row__header {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
   gap: 0.5rem;
   flex-wrap: wrap;
-  margin-bottom: 0.35rem;
 }
 
 .check-in-title {
@@ -516,7 +520,11 @@ button:hover {
   font-size: 0.95rem;
 }
 
-.check-in-card textarea {
+.check-in-thought {
+  margin: 0;
+}
+
+.check-in-row textarea {
   width: 100%;
   resize: vertical;
 }
@@ -524,7 +532,6 @@ button:hover {
 .evidence-block {
   display: grid;
   gap: 0.5rem;
-  margin-top: 0.35rem;
 }
 
 .evidence-options {
@@ -551,12 +558,12 @@ button:hover {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
-.check-in-card--no {
-  background: linear-gradient(135deg, #f0faf4 0%, #f6fff9 100%);
-  border-color: #b6e3c8;
+.check-in-row--no {
+  background: linear-gradient(90deg, #f0faf4 0%, #ffffff 100%);
+  border-left-color: #9fd9b8;
 }
 
-.check-in-card--no .choice-chip.is-selected {
+.check-in-row--no .choice-chip.is-selected {
   background: #d9f3e2;
   border-color: #9fd9b8;
   color: #0b5135;
@@ -585,27 +592,27 @@ button:hover {
 }
 
 .check-in-early {
-  background: linear-gradient(135deg, #f0f8f7 0%, #f7fbfa 100%);
-  border-color: #c7e3dd;
+  border-left-color: #7fb7ae;
+  background: linear-gradient(90deg, #f0f8f7 0%, #ffffff 100%);
 }
 
 .check-in-mid {
-  background: linear-gradient(135deg, #f6f4ff 0%, #faf8ff 100%);
-  border-color: #d9d2f3;
+  border-left-color: #9c8ad6;
+  background: linear-gradient(90deg, #f6f4ff 0%, #ffffff 100%);
 }
 
 .check-in-late {
-  background: linear-gradient(135deg, #fff8f1 0%, #fffaf5 100%);
-  border-color: #f0d9bb;
+  border-left-color: #e1a86c;
+  background: linear-gradient(90deg, #fff8f1 0%, #ffffff 100%);
 }
 
 .check-in-outcome {
-  background: linear-gradient(135deg, #f2f7ff 0%, #f7faff 100%);
-  border-color: #c7d6f1;
+  border-left-color: #8ca7dc;
+  background: linear-gradient(90deg, #f2f7ff 0%, #ffffff 100%);
 }
 
 .check-in-generic {
-  background: #fafaf7;
+  border-left-color: var(--border);
 }
 
 .entry-actions {

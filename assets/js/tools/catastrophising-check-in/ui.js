@@ -42,12 +42,12 @@ function getCheckInTone(label) {
 }
 
 function renderCheckIn(entry, checkIn, onSaveEvidence) {
-  const wrapper = document.createElement('article');
+  const wrapper = document.createElement('div');
   const tone = getCheckInTone(checkIn.label);
-  wrapper.className = `check-in-card ${tone}`;
+  wrapper.className = `check-in-row ${tone}`;
 
   const header = document.createElement('div');
-  header.className = 'check-in-card__header';
+  header.className = 'check-in-row__header';
 
   const label = document.createElement('p');
   label.className = 'check-in-title';
@@ -61,12 +61,8 @@ function renderCheckIn(entry, checkIn, onSaveEvidence) {
 
   wrapper.appendChild(header);
 
-  const thoughtLabel = document.createElement('p');
-  thoughtLabel.className = 'item-heading';
-  thoughtLabel.textContent = 'Original thought';
-  wrapper.appendChild(thoughtLabel);
-
   const thought = document.createElement('p');
+  thought.className = 'check-in-thought';
   thought.textContent = entry.thought;
   wrapper.appendChild(thought);
 
@@ -118,7 +114,7 @@ function renderCheckIn(entry, checkIn, onSaveEvidence) {
     noButton.classList.toggle('is-selected', value === 'no');
     followUp.hidden = value !== 'yes';
     noMessage.hidden = value !== 'no';
-    wrapper.classList.toggle('check-in-card--no', value === 'no');
+    wrapper.classList.toggle('check-in-row--no', value === 'no');
     if (value !== 'yes') {
       response.value = '';
     }
