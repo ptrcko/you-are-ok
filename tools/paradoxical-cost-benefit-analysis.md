@@ -26,7 +26,7 @@ title: Paradoxical Cost–Benefit Analysis
     <p class="hint">Use your own words. The text is stored exactly as you type it.</p>
 
     <label for="advantage-input">Advantages</label>
-    <input id="advantage-input" name="advantage" type="text" autocomplete="off" />
+    <textarea id="advantage-input" name="advantage" rows="2" autocomplete="off"></textarea>
     <p class="hint">Add reasons the thought or habit feels useful, protective, or familiar.</p>
     <div class="form-actions inline">
       <button type="button" id="add-advantage">Add to list</button>

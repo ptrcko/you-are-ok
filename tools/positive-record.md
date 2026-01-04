@@ -20,7 +20,7 @@ title: Positive Record
     <p class="hint">Example: "What have I achieved?" or "I feel like I am falling behind."</p>
 
     <label for="positive-input">Positives that belong with it</label>
-    <input id="positive-input" name="positive" type="text" autocomplete="off" />
+    <textarea id="positive-input" name="positive" rows="2" autocomplete="off"></textarea>
     <p class="hint">Add factual evidence, achievements, or moments of support that counter the negative thought.</p>
     <div class="form-actions inline">
       <button type="button" id="add-positive">Add to list</button>

@@ -38,6 +38,7 @@ export function initCostBenefitAnalysis() {
     renderEntries(entriesContainer, entries, {
       onSelect(entry) {
         editingId = entry.id;
+        clearInlineEditors();
         state.advantages = (entry.advantages || []).map((item) => ({ ...item }));
         state.disadvantages = (entry.disadvantages || []).map((item) => ({ ...item }));
         loadEntryIntoForm(form, cancelEditButton, entry);
@@ -66,6 +67,18 @@ export function initCostBenefitAnalysis() {
     renderItems(disadvantageList, state.disadvantages, handleEditItem('disadvantages'), handleDeleteItem('disadvantages'));
     setActiveSide(sideButtons, panels, state.activeSide);
     resetFormState(form, cancelEditButton);
+    clearInlineEditors();
+  }
+
+  function clearInlineEditors() {
+    [
+      { input: advantageInput, button: addAdvantageButton },
+      { input: disadvantageInput, button: addDisadvantageButton },
+    ].forEach(({ input, button }) => {
+      input.value = '';
+      delete input.dataset.editingId;
+      button.textContent = 'Add to list';
+    });
   }
 
   function handleEditItem(side) {
@@ -73,17 +86,13 @@ export function initCostBenefitAnalysis() {
       const items = side === 'advantages' ? state.advantages : state.disadvantages;
       const target = items.find((item) => item.id === itemId);
       if (!target) return;
-      const updated = window.prompt('Update the text', target.text);
-      if (!updated) return;
-      const next = updated.trim();
-      if (!next) return;
-      target.text = next;
-      renderItems(
-        side === 'advantages' ? advantageList : disadvantageList,
-        items,
-        handleEditItem(side),
-        handleDeleteItem(side),
-      );
+      const input = side === 'advantages' ? advantageInput : disadvantageInput;
+      const button = side === 'advantages' ? addAdvantageButton : addDisadvantageButton;
+      input.value = target.text;
+      input.dataset.editingId = target.id;
+      button.textContent = 'Update item';
+      input.focus();
+      setStatus(statusEl, 'Editing this item. Update the text and choose "Update item."');
     };
   }
 
@@ -109,16 +118,34 @@ export function initCostBenefitAnalysis() {
       return;
     }
     const items = side === 'advantages' ? state.advantages : state.disadvantages;
-    const updatedItems = createEntry.addItem(items, text);
-    if (side === 'advantages') {
-      state.advantages = updatedItems;
-      renderItems(advantageList, state.advantages, handleEditItem(side), handleDeleteItem(side));
+    const editingId = input.dataset.editingId;
+
+    if (editingId) {
+      const updatedItems = items.map((item) => (item.id === editingId ? { ...item, text } : item));
+      if (side === 'advantages') {
+        state.advantages = updatedItems;
+        renderItems(advantageList, state.advantages, handleEditItem(side), handleDeleteItem(side));
+      } else {
+        state.disadvantages = updatedItems;
+        renderItems(disadvantageList, state.disadvantages, handleEditItem(side), handleDeleteItem(side));
+      }
+      setStatus(statusEl, 'Item updated.');
     } else {
-      state.disadvantages = updatedItems;
-      renderItems(disadvantageList, state.disadvantages, handleEditItem(side), handleDeleteItem(side));
+      const updatedItems = createEntry.addItem(items, text);
+      if (side === 'advantages') {
+        state.advantages = updatedItems;
+        renderItems(advantageList, state.advantages, handleEditItem(side), handleDeleteItem(side));
+      } else {
+        state.disadvantages = updatedItems;
+        renderItems(disadvantageList, state.disadvantages, handleEditItem(side), handleDeleteItem(side));
+      }
+      setStatus(statusEl, '');
     }
+
+    delete input.dataset.editingId;
     input.value = '';
-    setStatus(statusEl, '');
+    const button = side === 'advantages' ? addAdvantageButton : addDisadvantageButton;
+    button.textContent = 'Add to list';
   }
 
   function handleSubmit(event) {
