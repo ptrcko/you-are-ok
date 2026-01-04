@@ -90,6 +90,12 @@ title: Tools
       </a>
     </li>
     <li>
+      <a class="summary-card" href="{{ '/tools/positive-record/' | relative_url }}">
+        <h3>Positive Record</h3>
+        <p>Pairs a thought or feeling with concrete positives that can counter the negative tone.</p>
+      </a>
+    </li>
+    <li>
       <a class="summary-card" href="{{ '/tools/anxiety-profile/' | relative_url }}">
         <h3>Anxiety Profile (Self-Reflection Checklist)</h3>
         <p>A calm checklist to note anxiety-related experiences that feel familiar to you.</p>
