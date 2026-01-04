@@ -77,6 +77,7 @@ function renderEntries(container, entries, callbacks) {
     }
 
     const notes = document.createElement('p');
+    notes.className = 'data-text';
     notes.textContent = entry.notes ? `Notes: ${entry.notes}` : 'Notes: (not recorded)';
 
     const savedAt = document.createElement('p');

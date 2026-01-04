@@ -51,7 +51,7 @@ function buildListItem(item, onEdit, onDelete) {
   wrapper.className = 'item-row';
 
   const text = document.createElement('p');
-  text.className = 'item-text';
+  text.className = 'item-text data-text';
   text.textContent = item.text;
 
   const actions = document.createElement('div');
@@ -192,6 +192,7 @@ export function renderEntries(container, entries, { onSelect, onDelete }) {
       item.appendChild(notesLabel);
 
       const notes = document.createElement('p');
+      notes.className = 'data-text';
       notes.textContent = entry.notes;
       item.appendChild(notes);
     }

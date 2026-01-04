@@ -26,7 +26,7 @@ title: Cost–Benefit Analysis
 
     <div class="side-panel" data-side="advantages" role="tabpanel" aria-label="Advantages panel">
       <label for="advantage-input">Add an advantage</label>
-      <input type="text" id="advantage-input" name="advantage" autocomplete="off" />
+      <textarea id="advantage-input" name="advantage" rows="2" autocomplete="off"></textarea>
       <p class="hint">Note anything that feels helpful, protective, or familiar.</p>
       <div class="form-actions inline">
         <button type="button" id="add-advantage">Add to list</button>
@@ -36,7 +36,7 @@ title: Cost–Benefit Analysis
 
     <div class="side-panel" data-side="disadvantages" role="tabpanel" aria-label="Disadvantages panel" hidden>
       <label for="disadvantage-input">Add a disadvantage</label>
-      <input type="text" id="disadvantage-input" name="disadvantage" autocomplete="off" />
+      <textarea id="disadvantage-input" name="disadvantage" rows="2" autocomplete="off"></textarea>
       <p class="hint">Note anything that feels costly, limiting, or tiring.</p>
       <div class="form-actions inline">
         <button type="button" id="add-disadvantage">Add to list</button>

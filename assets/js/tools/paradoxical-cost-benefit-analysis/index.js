@@ -72,11 +72,13 @@ function renderEntries(container, entries, callbacks) {
       entry.advantages.forEach((item) => advantages.appendChild(buildAdvantageChip(item)));
     } else {
       const note = document.createElement('p');
+      note.className = 'data-text';
       note.textContent = 'No advantages recorded.';
       advantages.appendChild(note);
     }
 
     const notes = document.createElement('p');
+    notes.className = 'data-text';
     notes.textContent = entry.notes ? `Notes: ${entry.notes}` : 'Notes: (not recorded)';
 
     const savedAt = document.createElement('p');
