@@ -17,8 +17,9 @@ title: Fear Hierarchy
   <form id="hierarchy-form">
     <fieldset>
       <legend>Fears (least to most intense)</legend>
-      <p class="hint">Add the fears in any order, then drag or use the arrow buttons to rearrange them. Leave blank rows unused.</p>
+      <p class="hint">Add fears as they come to mind, then drag or use the arrow buttons to rearrange them into the order you want.</p>
       <div id="levels-container"></div>
+      <button type="button" id="add-fear" class="secondary">Add a fear</button>
     </fieldset>
 
     <label for="fear-comments">Comments (optional)</label>
