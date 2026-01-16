@@ -7,32 +7,32 @@ title: Tools
   <div class="hero-grid">
     <p class="eyebrow">You are ok</p>
     <h1 class="hero-title">A calm library of gentle mental health tools.</h1>
-    <p class="hero-subtitle">Everything is local, private, and designed to feel reassuring on any screen. Choose a tool when you're ready, or simply browse to see what feels supportive today.</p>
+    <p class="hero-subtitle">Everything is local and private, with a steady, plain-language approach. Use it on mobile or desktop when you want a quiet way to note what you are experiencing.</p>
     <div class="hero-actions">
-      <a class="cta" href="#tools">Open the tools</a>
-      <a class="cta secondary" href="#comfort">See how it feels</a>
+      <a class="cta" href="#tools">View the tools</a>
+      <a class="cta secondary" href="#comfort">How it works</a>
       <span class="pill-badge">No logins · No tracking · Just you</span>
     </div>
     <div class="soft-panel">
-      This library is a companion, not a directive. Move through it at your own pace, knowing there is no scoring and nothing is saved beyond your browser.
+      This library is a companion, not a directive. Notes stay on your device, there is no scoring, and you can move at your own pace.
     </div>
   </div>
 </section>
 
 <section id="comfort">
-  <h2>Comfort first, on mobile or desktop</h2>
+  <h2>How it works</h2>
   <div class="supporting-grid">
     <div class="supporting-card">
-      <h3>Soft visuals</h3>
-      <p>Gentle gradients, rounded corners, and generous spacing create a calm backdrop that adapts gracefully to small screens.</p>
+      <h3>Works on any device</h3>
+      <p>The tools are easy to use on both mobile and desktop, with the same calm flow on each.</p>
     </div>
     <div class="supporting-card">
-      <h3>Guided copy</h3>
-      <p>Every description is short, steady, and neutral so you can decide how to use a tool without pressure.</p>
+      <h3>Short, neutral guidance</h3>
+      <p>Each tool uses brief, plain language so you can decide what fits without pressure.</p>
     </div>
     <div class="supporting-card">
       <h3>Privacy by default</h3>
-      <p>Nothing leaves your device. If you save entries, they stay in your browser. Clear them any time.</p>
+      <p>Nothing leaves your device. If you save entries, they stay stored locally and can be cleared any time.</p>
     </div>
   </div>
 </section>
