@@ -220,21 +220,17 @@ Rules:
 {
   "id": "uuid",
   "type": "fear_hierarchy",
-  "description": "string",
-  "levels": [
-    {
-      "level": 1,
-      "fear": "string"
-    }
-  ]
+  "fears": ["string"],
+  "comments": "optional"
 }
 ```
 
 Rules:
 
-* Levels are explicit
+* Ordering preserved
 * No auto-sorting
 * User controls structure
+* Comments are optional
 
 ---
 
