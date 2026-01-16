@@ -2,6 +2,7 @@ import { createLocalId } from '../shared/ids.js';
 
 const STORAGE_KEY = 'fear-hierarchy-entries';
 const LEVEL_COUNT = 10;
+const DEFAULT_LEVEL_HINT = 'What I fear';
 
 function formatTimestamp(value) {
   if (!value) return 'Saved time not recorded';
@@ -26,26 +27,58 @@ function persistEntries(entries) {
 function buildLevelRow(levelNumber, existingText = '') {
   const wrapper = document.createElement('div');
   wrapper.className = 'level-row';
+
+  const inputId = `level-${createLocalId()}`;
+
   const label = document.createElement('label');
-  label.setAttribute('for', `level-${levelNumber}`);
+  label.className = 'level-row__order';
+  label.setAttribute('for', inputId);
   label.textContent = `Level ${levelNumber}`;
+
+  const handle = document.createElement('button');
+  handle.type = 'button';
+  handle.className = 'drag-handle';
+  handle.setAttribute('aria-label', `Drag to reorder Level ${levelNumber}`);
+  handle.setAttribute('draggable', 'true');
+  handle.textContent = '↕';
 
   const input = document.createElement('input');
   input.type = 'text';
-  input.id = `level-${levelNumber}`;
+  input.id = inputId;
   input.name = 'levels';
   input.value = existingText;
-  input.placeholder = 'What I fear';
+  input.placeholder = DEFAULT_LEVEL_HINT;
   input.setAttribute('data-level', String(levelNumber));
+  input.setAttribute('aria-label', `Level ${levelNumber} description`);
 
-  wrapper.append(label, input);
+  const actions = document.createElement('div');
+  actions.className = 'level-row__actions';
+
+  const moveUp = document.createElement('button');
+  moveUp.type = 'button';
+  moveUp.className = 'level-move';
+  moveUp.dataset.move = 'up';
+  moveUp.textContent = '↑';
+  moveUp.setAttribute('aria-label', `Move Level ${levelNumber} up`);
+
+  const moveDown = document.createElement('button');
+  moveDown.type = 'button';
+  moveDown.className = 'level-move';
+  moveDown.dataset.move = 'down';
+  moveDown.textContent = '↓';
+  moveDown.setAttribute('aria-label', `Move Level ${levelNumber} down`);
+
+  actions.append(moveUp, moveDown);
+
+  wrapper.append(label, handle, input, actions);
   return wrapper;
 }
 
 function renderLevelInputs(container, existing = []) {
   container.innerHTML = '';
+  const sorted = [...existing].sort((a, b) => a.level - b.level);
   for (let i = 1; i <= LEVEL_COUNT; i += 1) {
-    const text = existing.find((item) => item.level === i)?.description ?? '';
+    const text = sorted[i - 1]?.description ?? '';
     container.appendChild(buildLevelRow(i, text));
   }
 }
@@ -110,9 +143,12 @@ function renderEntries(listEl, entries, callbacks) {
 
 function readForm(formEl) {
   const fearSummary = formEl.fearSummary.value.trim();
-  const levelInputs = Array.from(formEl.querySelectorAll('input[name="levels"]'));
-  const levels = levelInputs
-    .map((input) => ({ level: Number(input.dataset.level), description: input.value.trim() }))
+  const levelRows = Array.from(formEl.querySelectorAll('.level-row'));
+  const levels = levelRows
+    .map((row, index) => {
+      const input = row.querySelector('input[name="levels"]');
+      return { level: index + 1, description: input.value.trim() };
+    })
     .filter((item) => item.description);
 
   if (!fearSummary) {
@@ -134,11 +170,48 @@ function init() {
   const entriesContainer = document.getElementById('entries');
 
   let editId = null;
+  let draggedRow = null;
+
+  function updateLevelOrder() {
+    const rows = Array.from(levelsContainer.querySelectorAll('.level-row'));
+    rows.forEach((row, index) => {
+      const levelNumber = index + 1;
+      const label = row.querySelector('.level-row__order');
+      const input = row.querySelector('input[name="levels"]');
+      const moveUp = row.querySelector('[data-move="up"]');
+      const moveDown = row.querySelector('[data-move="down"]');
+      const handle = row.querySelector('.drag-handle');
+
+      row.dataset.level = String(levelNumber);
+      label.textContent = `Level ${levelNumber}`;
+      label.setAttribute('for', input.id);
+      input.dataset.level = String(levelNumber);
+      input.setAttribute('aria-label', `Level ${levelNumber} description`);
+
+      moveUp.disabled = index === 0;
+      moveDown.disabled = index === rows.length - 1;
+      moveUp.setAttribute('aria-label', `Move Level ${levelNumber} up`);
+      moveDown.setAttribute('aria-label', `Move Level ${levelNumber} down`);
+      handle.setAttribute('aria-label', `Drag to reorder Level ${levelNumber}`);
+    });
+  }
+
+  function moveRow(row, direction) {
+    if (!row) return;
+    if (direction === 'up' && row.previousElementSibling) {
+      levelsContainer.insertBefore(row, row.previousElementSibling);
+    }
+    if (direction === 'down' && row.nextElementSibling) {
+      levelsContainer.insertBefore(row.nextElementSibling, row);
+    }
+    updateLevelOrder();
+  }
 
   function handleEdit(entry) {
     editId = entry.id;
     form.fearSummary.value = entry.fearSummary;
     renderLevelInputs(levelsContainer, entry.levels);
+    updateLevelOrder();
     cancelEdit.hidden = false;
     status.textContent = 'Loaded this hierarchy for editing. Saving will replace the existing copy.';
   }
@@ -154,6 +227,7 @@ function init() {
       editId = null;
       form.reset();
       renderLevelInputs(levelsContainer);
+      updateLevelOrder();
       cancelEdit.hidden = true;
     }
   }
@@ -167,14 +241,60 @@ function init() {
   }
 
   renderLevelInputs(levelsContainer);
+  updateLevelOrder();
   refreshEntries();
 
   cancelEdit.addEventListener('click', () => {
     editId = null;
     form.reset();
     renderLevelInputs(levelsContainer);
+    updateLevelOrder();
     cancelEdit.hidden = true;
     status.textContent = 'Edit cancelled. The saved version remains unchanged.';
+  });
+
+  levelsContainer.addEventListener('click', (event) => {
+    const button = event.target.closest('.level-move');
+    if (!button) return;
+    const row = button.closest('.level-row');
+    moveRow(row, button.dataset.move);
+  });
+
+  levelsContainer.addEventListener('dragstart', (event) => {
+    const handle = event.target.closest('.drag-handle');
+    if (!handle) {
+      event.preventDefault();
+      return;
+    }
+    const row = handle.closest('.level-row');
+    if (!row) return;
+    draggedRow = row;
+    row.classList.add('is-dragging');
+    event.dataTransfer.effectAllowed = 'move';
+    event.dataTransfer.setData('text/plain', row.dataset.level ?? '');
+  });
+
+  levelsContainer.addEventListener('dragover', (event) => {
+    if (!draggedRow) return;
+    event.preventDefault();
+    const row = event.target.closest('.level-row');
+    if (!row || row === draggedRow) return;
+    const { top, height } = row.getBoundingClientRect();
+    const shouldInsertAfter = event.clientY > top + height / 2;
+    levelsContainer.insertBefore(draggedRow, shouldInsertAfter ? row.nextSibling : row);
+    updateLevelOrder();
+  });
+
+  levelsContainer.addEventListener('drop', (event) => {
+    if (!draggedRow) return;
+    event.preventDefault();
+  });
+
+  levelsContainer.addEventListener('dragend', () => {
+    if (!draggedRow) return;
+    draggedRow.classList.remove('is-dragging');
+    draggedRow = null;
+    updateLevelOrder();
   });
 
   form.addEventListener('submit', (event) => {
@@ -190,6 +310,7 @@ function init() {
       refreshEntries();
       form.reset();
       renderLevelInputs(levelsContainer);
+      updateLevelOrder();
       cancelEdit.hidden = true;
       editId = null;
       status.textContent = 'Saved locally.';

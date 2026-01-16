@@ -21,7 +21,7 @@ title: Fear Hierarchy
 
     <fieldset>
       <legend>Levels (least to most frightening)</legend>
-      <p class="hint">Start with the least frightening activity at Level 1 and move upward. You can leave levels blank.</p>
+      <p class="hint">Add the fears in any order, then drag or use the arrow buttons to rearrange them. You can leave levels blank.</p>
       <div id="levels-container"></div>
     </fieldset>
 
@@ -38,7 +38,7 @@ title: Fear Hierarchy
     <summary>How this page works</summary>
     <ul>
       <li>Write a short description of the fear you are mapping.</li>
-      <li>Add up to ten levels. The numbering is fixed to keep the order clear.</li>
+      <li>Add up to ten levels, then reorder them until the sequence feels right.</li>
       <li>Save to keep the hierarchy on this device. You can reopen, edit, or delete it later.</li>
     </ul>
   </details>
