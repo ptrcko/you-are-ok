@@ -2,7 +2,7 @@ import { createLocalId } from '../shared/ids.js';
 
 const STORAGE_KEY = 'fear-hierarchy-entries';
 const LEVEL_COUNT = 10;
-const DEFAULT_LEVEL_HINT = 'What I fear';
+const DEFAULT_LEVEL_HINT = 'Fear in the moment';
 
 function formatTimestamp(value) {
   if (!value) return 'Saved time not recorded';
@@ -33,12 +33,12 @@ function buildLevelRow(levelNumber, existingText = '') {
   const label = document.createElement('label');
   label.className = 'level-row__order';
   label.setAttribute('for', inputId);
-  label.textContent = `Level ${levelNumber}`;
+  label.textContent = `Fear ${levelNumber}`;
 
   const handle = document.createElement('button');
   handle.type = 'button';
   handle.className = 'drag-handle';
-  handle.setAttribute('aria-label', `Drag to reorder Level ${levelNumber}`);
+  handle.setAttribute('aria-label', `Drag to reorder Fear ${levelNumber}`);
   handle.setAttribute('draggable', 'true');
   handle.textContent = '↕';
 
@@ -49,7 +49,7 @@ function buildLevelRow(levelNumber, existingText = '') {
   input.value = existingText;
   input.placeholder = DEFAULT_LEVEL_HINT;
   input.setAttribute('data-level', String(levelNumber));
-  input.setAttribute('aria-label', `Level ${levelNumber} description`);
+  input.setAttribute('aria-label', `Fear ${levelNumber} description`);
 
   const actions = document.createElement('div');
   actions.className = 'level-row__actions';
@@ -59,14 +59,14 @@ function buildLevelRow(levelNumber, existingText = '') {
   moveUp.className = 'level-move';
   moveUp.dataset.move = 'up';
   moveUp.textContent = '↑';
-  moveUp.setAttribute('aria-label', `Move Level ${levelNumber} up`);
+  moveUp.setAttribute('aria-label', `Move Fear ${levelNumber} up`);
 
   const moveDown = document.createElement('button');
   moveDown.type = 'button';
   moveDown.className = 'level-move';
   moveDown.dataset.move = 'down';
   moveDown.textContent = '↓';
-  moveDown.setAttribute('aria-label', `Move Level ${levelNumber} down`);
+  moveDown.setAttribute('aria-label', `Move Fear ${levelNumber} down`);
 
   actions.append(moveUp, moveDown);
 
@@ -76,18 +76,29 @@ function buildLevelRow(levelNumber, existingText = '') {
 
 function renderLevelInputs(container, existing = []) {
   container.innerHTML = '';
-  const sorted = [...existing].sort((a, b) => a.level - b.level);
   for (let i = 1; i <= LEVEL_COUNT; i += 1) {
-    const text = sorted[i - 1]?.description ?? '';
+    const text = existing[i - 1] ?? '';
     container.appendChild(buildLevelRow(i, text));
   }
+}
+
+function normalizeFears(entry) {
+  if (Array.isArray(entry.fears)) {
+    return entry.fears.filter(Boolean);
+  }
+  if (Array.isArray(entry.levels)) {
+    return entry.levels
+      .map((item) => (typeof item === 'string' ? item : item.description ?? item.fear ?? ''))
+      .filter(Boolean);
+  }
+  return [];
 }
 
 function renderEntries(listEl, entries, callbacks) {
   listEl.innerHTML = '';
   if (!entries.length) {
     const empty = document.createElement('p');
-    empty.textContent = 'No hierarchies saved on this device yet.';
+    empty.textContent = 'No fear lists saved on this device yet.';
     listEl.appendChild(empty);
     return;
   }
@@ -100,7 +111,9 @@ function renderEntries(listEl, entries, callbacks) {
     header.className = 'saved-card__header';
 
     const title = document.createElement('h3');
-    title.textContent = entry.fearSummary || 'Untitled hierarchy';
+    const fears = normalizeFears(entry);
+    const titleSuffix = fears.length ? ` (${fears.length})` : '';
+    title.textContent = `Fear list${titleSuffix}`;
     header.appendChild(title);
 
     const actions = document.createElement('div');
@@ -121,7 +134,7 @@ function renderEntries(listEl, entries, callbacks) {
     header.appendChild(actions);
 
     const description = document.createElement('p');
-    description.textContent = 'Levels from least to most frightening:';
+    description.textContent = 'Fears in the order you set:';
 
     const saved = document.createElement('p');
     saved.className = 'hint';
@@ -129,37 +142,42 @@ function renderEntries(listEl, entries, callbacks) {
 
     const list = document.createElement('ol');
     list.className = 'hierarchy-list';
-    const sortedLevels = [...entry.levels].sort((a, b) => a.level - b.level);
-    sortedLevels.forEach((item) => {
+    fears.forEach((item) => {
       const li = document.createElement('li');
-      li.textContent = item.description || 'No description provided';
+      li.textContent = item || 'No description provided';
       list.appendChild(li);
     });
 
     card.append(header, saved, description, list);
+
+    if (entry.comments) {
+      const commentsLabel = document.createElement('p');
+      commentsLabel.className = 'item-heading';
+      commentsLabel.textContent = 'Comments';
+      const comments = document.createElement('p');
+      comments.className = 'data-text';
+      comments.textContent = entry.comments;
+      card.append(commentsLabel, comments);
+    }
     listEl.appendChild(card);
   });
 }
 
 function readForm(formEl) {
-  const fearSummary = formEl.fearSummary.value.trim();
   const levelRows = Array.from(formEl.querySelectorAll('.level-row'));
-  const levels = levelRows
+  const fears = levelRows
     .map((row, index) => {
       const input = row.querySelector('input[name="levels"]');
-      return { level: index + 1, description: input.value.trim() };
+      return input.value.trim();
     })
-    .filter((item) => item.description);
+    .filter(Boolean);
 
-  if (!fearSummary) {
-    throw new Error('Please describe the fear you are mapping.');
+  if (!fears.length) {
+    throw new Error('Add at least one fear to keep the list meaningful.');
   }
 
-  if (!levels.length) {
-    throw new Error('Add at least one level to keep the order meaningful.');
-  }
-
-  return { fearSummary, levels };
+  const comments = formEl.comments.value.trim();
+  return { fears, comments };
 }
 
 function init() {
@@ -183,16 +201,16 @@ function init() {
       const handle = row.querySelector('.drag-handle');
 
       row.dataset.level = String(levelNumber);
-      label.textContent = `Level ${levelNumber}`;
+      label.textContent = `Fear ${levelNumber}`;
       label.setAttribute('for', input.id);
       input.dataset.level = String(levelNumber);
-      input.setAttribute('aria-label', `Level ${levelNumber} description`);
+      input.setAttribute('aria-label', `Fear ${levelNumber} description`);
 
       moveUp.disabled = index === 0;
       moveDown.disabled = index === rows.length - 1;
-      moveUp.setAttribute('aria-label', `Move Level ${levelNumber} up`);
-      moveDown.setAttribute('aria-label', `Move Level ${levelNumber} down`);
-      handle.setAttribute('aria-label', `Drag to reorder Level ${levelNumber}`);
+      moveUp.setAttribute('aria-label', `Move Fear ${levelNumber} up`);
+      moveDown.setAttribute('aria-label', `Move Fear ${levelNumber} down`);
+      handle.setAttribute('aria-label', `Drag to reorder Fear ${levelNumber}`);
     });
   }
 
@@ -209,15 +227,15 @@ function init() {
 
   function handleEdit(entry) {
     editId = entry.id;
-    form.fearSummary.value = entry.fearSummary;
-    renderLevelInputs(levelsContainer, entry.levels);
+    form.comments.value = entry.comments ?? '';
+    renderLevelInputs(levelsContainer, normalizeFears(entry));
     updateLevelOrder();
     cancelEdit.hidden = false;
-    status.textContent = 'Loaded this hierarchy for editing. Saving will replace the existing copy.';
+    status.textContent = 'Loaded this list for editing. Saving will replace the existing copy.';
   }
 
   function handleDelete(entry) {
-    const confirmed = window.confirm('Delete this hierarchy from this device?');
+    const confirmed = window.confirm('Delete this fear list from this device?');
     if (!confirmed) return;
     const remaining = getEntries().filter((item) => item.id !== entry.id);
     persistEntries(remaining);

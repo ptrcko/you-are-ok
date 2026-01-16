@@ -158,11 +158,11 @@ There is **no concept of completion**.
 
 ### 5.5 Fear Hierarchy
 
-**Intent:** Externalise feared situations on a gradient.
+**Intent:** Capture the fears present in the moment and arrange them in order.
 
 **User Inputs:**
-- Description of fear
-- Ordered list of fear levels (1–10 recommended)
+- Ordered list of fears
+- Optional comments
 
 **Rules:**
 - Ordering is user-defined
