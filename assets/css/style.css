@@ -344,6 +344,41 @@ ul {
   cursor: not-allowed;
 }
 
+@media (max-width: 640px) {
+  .level-row {
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "label label"
+      "input input"
+      "handle actions";
+    gap: 0.5rem 0.75rem;
+    align-items: start;
+  }
+
+  .level-row__order {
+    grid-area: label;
+  }
+
+  .level-row input[type='text'] {
+    grid-area: input;
+  }
+
+  .drag-handle {
+    grid-area: handle;
+    justify-self: start;
+  }
+
+  .level-row__actions {
+    grid-area: actions;
+    justify-self: end;
+  }
+
+  .drag-handle,
+  .level-move {
+    padding: 0.3rem 0.5rem;
+  }
+}
+
 .pill-row {
   display: flex;
   flex-wrap: wrap;
