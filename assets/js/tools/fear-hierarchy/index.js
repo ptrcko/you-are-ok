@@ -1,7 +1,6 @@
 import { createLocalId } from '../shared/ids.js';
 
 const STORAGE_KEY = 'fear-hierarchy-entries';
-const LEVEL_COUNT = 10;
 const DEFAULT_LEVEL_HINT = 'Fear in the moment';
 
 function formatTimestamp(value) {
@@ -76,10 +75,9 @@ function buildLevelRow(levelNumber, existingText = '') {
 
 function renderLevelInputs(container, existing = []) {
   container.innerHTML = '';
-  for (let i = 1; i <= LEVEL_COUNT; i += 1) {
-    const text = existing[i - 1] ?? '';
-    container.appendChild(buildLevelRow(i, text));
-  }
+  existing.forEach((text, index) => {
+    container.appendChild(buildLevelRow(index + 1, text ?? ''));
+  });
 }
 
 function normalizeFears(entry) {
@@ -185,6 +183,7 @@ function init() {
   const levelsContainer = document.getElementById('levels-container');
   const status = document.getElementById('form-status');
   const cancelEdit = document.getElementById('cancel-edit');
+  const addFearButton = document.getElementById('add-fear');
   const entriesContainer = document.getElementById('entries');
 
   let editId = null;
@@ -225,6 +224,12 @@ function init() {
     updateLevelOrder();
   }
 
+  function addLevelRow(text = '') {
+    const nextIndex = levelsContainer.children.length + 1;
+    levelsContainer.appendChild(buildLevelRow(nextIndex, text));
+    updateLevelOrder();
+  }
+
   function handleEdit(entry) {
     editId = entry.id;
     form.comments.value = entry.comments ?? '';
@@ -261,6 +266,11 @@ function init() {
   renderLevelInputs(levelsContainer);
   updateLevelOrder();
   refreshEntries();
+
+  addFearButton.addEventListener('click', () => {
+    addLevelRow();
+    status.textContent = '';
+  });
 
   cancelEdit.addEventListener('click', () => {
     editId = null;
