@@ -1,57 +1,45 @@
 ---
 layout: default
-title: Positive Record
+title: Daily Good Record
 ---
 
 <section class="tool-header">
-  <h2>Positive Record</h2>
-  <p class="intro">Start with a thought or feeling and list real, positive facts that sit alongside it.</p>
+  <h2>Daily Good Record</h2>
+  <p class="intro">A short two-step check-in to build perspective over time.</p>
   <div class="microcopy">
-    <p>Everything is saved locally on this device.</p>
-    <p>Add as many positives as you like; you can edit or delete entries anytime.</p>
+    <p>Keep it simple: answer each question with a single choice.</p>
+    <p>No interpretation, no pressure, and no extra explanation required.</p>
   </div>
 </section>
 
-<section class="form-first">
-  <h2>New entry</h2>
-  <form id="positive-record-form">
-    <label for="focus">Thought or feeling <span aria-hidden="true">(required)</span></label>
-    <textarea id="focus" name="focus" rows="3" required></textarea>
-    <p class="hint">Example: "What have I achieved?" or "I feel like I am falling behind."</p>
-
-    <label for="positive-input">Positives that belong with it</label>
-    <textarea id="positive-input" name="positive" rows="2" autocomplete="off"></textarea>
-    <p class="hint">Add factual evidence, achievements, or moments of support that counter the negative thought.</p>
-    <div class="form-actions inline">
-      <button type="button" id="add-positive">Add to list</button>
-    </div>
-    <div id="positive-list" class="item-list" aria-live="polite"></div>
-
-    <label for="notes">Notes (optional)</label>
-    <textarea id="notes" name="notes" rows="3"></textarea>
-
-    <div class="form-actions">
-      <button type="submit">Save locally</button>
-      <button type="button" id="cancel-edit" class="secondary" hidden>Cancel edit</button>
-      <p id="form-status" class="form-status" aria-live="polite"></p>
-    </div>
-  </form>
+<section>
+  <h2>Today</h2>
+  <p id="today-question" class="question-text">Did anything bad happen today?</p>
+  <div id="today-options" class="form-actions" role="group" aria-labelledby="today-question">
+    <button type="button" data-answer="yes">Yes</button>
+    <button type="button" data-answer="no" class="secondary">No</button>
+  </div>
 </section>
 
-<section class="supporting">
-  <details class="collapsible" aria-label="How this page works">
-    <summary>How this page works</summary>
-    <ul>
-      <li>Use your own wording for the thought or feeling; it helps when revisiting later.</li>
-      <li>List concrete positives, not aspirations—things you have done, noticed, or experienced.</li>
-      <li>Saving keeps a copy in your browser only. You can edit or delete it on this device.</li>
-    </ul>
-  </details>
+<section id="past-section" hidden>
+  <h2>Past day</h2>
+  <p id="past-question" class="question-text"></p>
+  <div id="past-options" class="form-actions" role="group" aria-labelledby="past-question">
+    <button type="button" data-answer="yes">Yes</button>
+    <button type="button" data-answer="no" class="secondary">No</button>
+    <button type="button" data-answer="i_dont_remember" class="secondary">I don’t remember</button>
+  </div>
+</section>
+
+<section id="reflection-section" hidden>
+  <h2>Reflection (optional)</h2>
+  <p id="reflection-text" class="notice"></p>
+  <p id="form-status" class="form-status" aria-live="polite"></p>
 </section>
 
 <section>
-  <h2>Saved entries</h2>
-  <p class="notice">Entries are stored in your browser only and never sent to a server.</p>
+  <h2>Saved check-ins</h2>
+  <p class="notice">Entries are stored in your browser only and never sent anywhere.</p>
   <div id="entries"></div>
 </section>
 
