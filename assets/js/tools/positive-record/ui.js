@@ -11,6 +11,166 @@ function formatAnswer(value) {
   return value;
 }
 
+function dayKey(value) {
+  const date = new Date(value);
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+}
+
+function isGoodDayEntry(entry) {
+  return entry.today_answer === 'no';
+}
+
+function getLatestPerDay(entries) {
+  const map = new Map();
+  entries.forEach((entry) => {
+    const timestamp = entry.createdAt || entry.updatedAt;
+    if (!timestamp) return;
+    const key = dayKey(timestamp);
+    const existing = map.get(key);
+    const entryTime = new Date(timestamp).getTime();
+    const existingTime = existing ? new Date(existing.createdAt || existing.updatedAt || 0).getTime() : -Infinity;
+    if (!existing || entryTime >= existingTime) {
+      map.set(key, entry);
+    }
+  });
+  return Array.from(map.values()).sort(
+    (a, b) => new Date(a.createdAt || a.updatedAt || 0) - new Date(b.createdAt || b.updatedAt || 0),
+  );
+}
+
+function calculateGoodStreak(entries) {
+  const uniqueByDay = getLatestPerDay(entries).sort(
+    (a, b) => new Date(b.createdAt || b.updatedAt || 0) - new Date(a.createdAt || a.updatedAt || 0),
+  );
+
+  let streak = 0;
+  for (const entry of uniqueByDay) {
+    if (isGoodDayEntry(entry)) {
+      streak += 1;
+    } else {
+      break;
+    }
+  }
+  return streak;
+}
+
+function createTrendSvg(entries) {
+  const uniqueByDay = getLatestPerDay(entries);
+  const width = 700;
+  const height = 220;
+  const padding = 24;
+
+  if (uniqueByDay.length <= 1) {
+    return '<p class="notice">Add at least two check-ins to draw the trend line.</p>';
+  }
+
+  let totalGood = 0;
+  const points = uniqueByDay.map((entry, index) => {
+    if (isGoodDayEntry(entry)) totalGood += 1;
+    const ratio = totalGood / (index + 1);
+    return { ratio, label: new Date(entry.createdAt || entry.updatedAt || Date.now()).toLocaleDateString() };
+  });
+
+  const stepX = (width - padding * 2) / (points.length - 1);
+  const coordinates = points.map((point, index) => {
+    const x = padding + index * stepX;
+    const y = height - padding - point.ratio * (height - padding * 2);
+    return { ...point, x, y };
+  });
+
+  const polyline = coordinates.map((point) => `${point.x},${point.y}`).join(' ');
+  const latest = points[points.length - 1];
+  const latestPercent = Math.round(latest.ratio * 100);
+
+  return `
+    <div class="trend-chart" role="img" aria-label="Trend line of good-day percentage over time">
+      <svg viewBox="0 0 ${width} ${height}" preserveAspectRatio="none" aria-hidden="true">
+        <line x1="${padding}" y1="${height - padding}" x2="${width - padding}" y2="${height - padding}" class="chart-axis"></line>
+        <line x1="${padding}" y1="${padding}" x2="${padding}" y2="${height - padding}" class="chart-axis"></line>
+        <polyline points="${polyline}" class="chart-line"></polyline>
+        ${coordinates
+          .map(
+            (point) =>
+              `<circle cx="${point.x}" cy="${point.y}" r="4" class="chart-point"><title>${point.label}: ${Math.round(
+                point.ratio * 100,
+              )}% good-day rate</title></circle>`,
+          )
+          .join('')}
+      </svg>
+      <p class="chart-summary">Current good-day rate: <strong>${latestPercent}%</strong></p>
+    </div>
+  `;
+}
+
+function createCalendarMarkup(entries) {
+  const today = new Date();
+  const start = new Date(today);
+  start.setDate(today.getDate() - 41);
+
+  const latestByDay = new Map(
+    getLatestPerDay(entries).map((entry) => [dayKey(entry.createdAt || entry.updatedAt), entry]),
+  );
+
+  const cells = [];
+
+  for (let i = 0; i < 42; i += 1) {
+    const date = new Date(start);
+    date.setDate(start.getDate() + i);
+
+    const key = dayKey(date);
+    const entry = latestByDay.get(key);
+
+    let state = 'empty';
+    let label = `${date.toLocaleDateString()}: no check-in`;
+    if (entry) {
+      state = isGoodDayEntry(entry) ? 'good' : 'tough';
+      label = `${date.toLocaleDateString()}: ${isGoodDayEntry(entry) ? 'good day' : 'tough day'}`;
+    }
+
+    cells.push(
+      `<li class="calendar-cell ${state}" title="${label}" aria-label="${label}">${date.getDate()}</li>`,
+    );
+  }
+
+  return `
+    <div class="calendar-wrap">
+      <p class="calendar-caption">Last 6 weeks</p>
+      <ul class="calendar-grid" role="list">${cells.join('')}</ul>
+      <p class="calendar-legend">
+        <span><i class="legend-dot good"></i> Good day</span>
+        <span><i class="legend-dot tough"></i> Tough day</span>
+        <span><i class="legend-dot empty"></i> No check-in</span>
+      </p>
+    </div>
+  `;
+}
+
+function renderSwitcher(panels, defaultKey = 'streak') {
+  const { switcher, content } = panels;
+  const buttons = Array.from(switcher.querySelectorAll('button[data-view]'));
+  const views = Array.from(content.querySelectorAll('[data-panel]'));
+
+  function setView(view) {
+    buttons.forEach((button) => {
+      const active = button.dataset.view === view;
+      button.classList.toggle('active', active);
+      button.setAttribute('aria-selected', String(active));
+    });
+
+    views.forEach((panel) => {
+      panel.hidden = panel.dataset.panel !== view;
+    });
+  }
+
+  switcher.addEventListener('click', (event) => {
+    const button = event.target.closest('button[data-view]');
+    if (!button) return;
+    setView(button.dataset.view);
+  });
+
+  setView(defaultKey);
+}
+
 export function getPageElements() {
   return {
     todayOptions: document.querySelector('#today-options'),
@@ -21,6 +181,8 @@ export function getPageElements() {
     reflectionText: document.querySelector('#reflection-text'),
     statusEl: document.querySelector('#form-status'),
     entriesContainer: document.querySelector('#entries'),
+    vizSwitcher: document.querySelector('#viz-switcher'),
+    vizPanels: document.querySelector('#viz-panels'),
   };
 }
 
@@ -30,6 +192,35 @@ export function setPastQuestion(pastQuestionEl, dateText) {
 
 export function setStatus(statusEl, message) {
   statusEl.textContent = message;
+}
+
+export function renderVisualizations(switcher, panelsEl, entries) {
+  if (!switcher || !panelsEl) return;
+
+  const streak = calculateGoodStreak(entries);
+  const total = entries.length;
+  const goodCount = entries.filter(isGoodDayEntry).length;
+  const rate = total ? Math.round((goodCount / total) * 100) : 0;
+
+  panelsEl.innerHTML = `
+    <section class="viz-panel" data-panel="streak">
+      <p class="streak-count">${streak}</p>
+      <p class="streak-copy">Current good-day streak</p>
+      <p class="notice">A good day is when you answered “No” to “Did anything bad happen today?”.</p>
+    </section>
+    <section class="viz-panel" data-panel="calendar" hidden>
+      ${createCalendarMarkup(entries)}
+    </section>
+    <section class="viz-panel" data-panel="trend" hidden>
+      ${createTrendSvg(entries)}
+      <p class="notice">Overall good-day ratio: <strong>${rate}%</strong> (${goodCount}/${total || 0}).</p>
+    </section>
+  `;
+
+  if (!switcher.dataset.bound) {
+    renderSwitcher({ switcher, content: panelsEl });
+    switcher.dataset.bound = 'true';
+  }
 }
 
 export function renderEntries(container, entries, { onDelete }) {

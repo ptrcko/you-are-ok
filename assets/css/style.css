@@ -952,3 +952,144 @@ button:hover {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
+.viz-panels {
+  margin-top: 0.9rem;
+}
+
+.viz-panel {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem;
+  background: #fafaf7;
+}
+
+.streak-count {
+  margin: 0;
+  font-size: clamp(2.1rem, 6vw, 3rem);
+  line-height: 1;
+  color: var(--accent-strong);
+  font-weight: 800;
+}
+
+.streak-copy {
+  margin: 0.4rem 0 0.8rem;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.calendar-wrap {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.calendar-caption {
+  margin: 0;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.calendar-grid {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.4rem;
+}
+
+.calendar-cell {
+  min-height: 2.1rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  display: grid;
+  place-items: center;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.calendar-cell.good {
+  background: #d9efe7;
+  border-color: #9ac9b7;
+  color: #1f5e47;
+  font-weight: 700;
+}
+
+.calendar-cell.tough {
+  background: #f8e7e3;
+  border-color: #e7bcb3;
+  color: #8f3528;
+  font-weight: 700;
+}
+
+.calendar-cell.empty {
+  background: #f8f8f6;
+}
+
+.calendar-legend {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.legend-dot {
+  display: inline-block;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 999px;
+  margin-right: 0.3rem;
+  border: 1px solid var(--border);
+  vertical-align: middle;
+}
+
+.legend-dot.good {
+  background: #d9efe7;
+  border-color: #9ac9b7;
+}
+
+.legend-dot.tough {
+  background: #f8e7e3;
+  border-color: #e7bcb3;
+}
+
+.legend-dot.empty {
+  background: #f8f8f6;
+}
+
+.trend-chart {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.trend-chart svg {
+  width: 100%;
+  min-height: 220px;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.chart-axis {
+  stroke: #c8cbc6;
+  stroke-width: 1;
+}
+
+.chart-line {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.chart-point {
+  fill: var(--accent-strong);
+}
+
+.chart-summary {
+  margin: 0;
+  color: var(--muted);
+}
