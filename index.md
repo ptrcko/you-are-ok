@@ -91,8 +91,8 @@ title: Tools
     </li>
     <li>
       <a class="summary-card" href="{{ '/tools/positive-record/' | relative_url }}">
-        <h3>Positive Record</h3>
-        <p>Pairs a thought or feeling with concrete positives that can counter the negative tone.</p>
+        <h3>Daily Good Record</h3>
+        <p>A two-question daily check-in that pairs today with one past day for perspective.</p>
       </a>
     </li>
     <li>
