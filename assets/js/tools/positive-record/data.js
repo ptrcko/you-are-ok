@@ -35,11 +35,20 @@ export function randomReflection() {
   return REFLECTIONS[Math.floor(Math.random() * REFLECTIONS.length)];
 }
 
-export function createEntry({ todayAnswer, pastAnswer, pastDate }) {
+export function createTodayEntry(todayAnswer) {
   return {
     id: createLocalId(),
     type: ENTRY_TYPE,
+    record_kind: 'current_day',
     today_answer: todayAnswer,
+  };
+}
+
+export function createPastEntry({ pastAnswer, pastDate }) {
+  return {
+    id: createLocalId(),
+    type: ENTRY_TYPE,
+    record_kind: 'background_day',
     past_answer: pastAnswer,
     past_date: pastDate,
     reflection: true,

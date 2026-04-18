@@ -1,4 +1,13 @@
-import { createEntry, deleteEntry, formatLongDate, listEntries, randomPastDate, randomReflection, saveEntry } from './data.js';
+import {
+  createPastEntry,
+  createTodayEntry,
+  deleteEntry,
+  formatLongDate,
+  listEntries,
+  randomPastDate,
+  randomReflection,
+  saveEntry,
+} from './data.js';
 import { getPageElements, renderEntries, renderVisualizations, setPastQuestion, setStatus } from './ui.js';
 
 export function initDailyGoodRecord() {
@@ -45,11 +54,13 @@ export function initDailyGoodRecord() {
     if (!button) return;
 
     todayAnswer = button.dataset.answer;
+    saveEntry(createTodayEntry(todayAnswer));
     selectedPastDate = randomPastDate();
     setPastQuestion(pastQuestion, formatLongDate(selectedPastDate));
     pastSection.hidden = false;
     reflectionSection.hidden = true;
-    setStatus(statusEl, '');
+    setStatus(statusEl, 'Saved today’s check-in locally.');
+    refreshEntries();
   }
 
   function handlePastAnswer(event) {
@@ -59,8 +70,7 @@ export function initDailyGoodRecord() {
     const pastAnswer = button.dataset.answer;
     const pastDate = formatLongDate(selectedPastDate);
 
-    const entry = createEntry({
-      todayAnswer,
+    const entry = createPastEntry({
       pastAnswer,
       pastDate,
     });
@@ -68,7 +78,7 @@ export function initDailyGoodRecord() {
     saveEntry(entry);
     reflectionText.textContent = randomReflection();
     reflectionSection.hidden = false;
-    setStatus(statusEl, 'Saved locally.');
+    setStatus(statusEl, 'Saved background-day check-in locally.');
 
     resetFlow();
     refreshEntries();

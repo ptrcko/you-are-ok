@@ -17,7 +17,11 @@ function dayKey(value) {
 }
 
 function isGoodDayEntry(entry) {
-  return entry.today_answer === 'no';
+  return entry.today_answer === 'no' && entry.record_kind !== 'background_day';
+}
+
+function isCurrentDayEntry(entry) {
+  return entry.record_kind === 'current_day' || (entry.record_kind !== 'background_day' && entry.today_answer);
 }
 
 function getLatestPerDay(entries) {
@@ -199,9 +203,10 @@ export function setStatus(statusEl, message) {
 export function renderVisualizations(switcher, panelsEl, entries) {
   if (!switcher || !panelsEl) return;
 
-  const streak = calculateGoodStreak(entries);
-  const total = entries.length;
-  const goodCount = entries.filter(isGoodDayEntry).length;
+  const currentDayEntries = entries.filter(isCurrentDayEntry);
+  const streak = calculateGoodStreak(currentDayEntries);
+  const total = currentDayEntries.length;
+  const goodCount = currentDayEntries.filter(isGoodDayEntry).length;
   const rate = total ? Math.round((goodCount / total) * 100) : 0;
 
   panelsEl.innerHTML = `
@@ -211,10 +216,10 @@ export function renderVisualizations(switcher, panelsEl, entries) {
       <p class="notice">A good day is when you answered “No” to “Did anything bad happen today?”.</p>
     </section>
     <section class="viz-panel" data-panel="calendar" hidden>
-      ${createCalendarMarkup(entries)}
+      ${createCalendarMarkup(currentDayEntries)}
     </section>
     <section class="viz-panel" data-panel="trend" hidden>
-      ${createTrendSvg(entries)}
+      ${createTrendSvg(currentDayEntries)}
       <p class="notice">Overall good-day ratio: <strong>${rate}%</strong> (${goodCount}/${total || 0}).</p>
     </section>
   `;
@@ -260,10 +265,16 @@ export function renderEntries(container, entries, { onDelete }) {
     const details = document.createElement('dl');
     details.className = 'entry-details';
 
-    const rows = [
-      ['Today', formatAnswer(entry.today_answer)],
-      [entry.past_date ? `Past day (${entry.past_date})` : 'Past day', formatAnswer(entry.past_answer)],
-    ];
+    const rows = [];
+    if (entry.today_answer) {
+      rows.push(['Today', formatAnswer(entry.today_answer)]);
+    }
+    if (entry.past_answer) {
+      rows.push([entry.past_date ? `Past day (${entry.past_date})` : 'Past day', formatAnswer(entry.past_answer)]);
+    }
+    if (!rows.length) {
+      rows.push(['Record', 'Saved check-in']);
+    }
 
     rows.forEach(([label, value]) => {
       const dt = document.createElement('dt');
