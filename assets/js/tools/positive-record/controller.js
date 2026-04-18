@@ -1,5 +1,5 @@
 import { createEntry, deleteEntry, formatLongDate, listEntries, randomPastDate, randomReflection, saveEntry } from './data.js';
-import { getPageElements, renderEntries, setPastQuestion, setStatus } from './ui.js';
+import { getPageElements, renderEntries, renderVisualizations, setPastQuestion, setStatus } from './ui.js';
 
 export function initDailyGoodRecord() {
   const {
@@ -11,6 +11,8 @@ export function initDailyGoodRecord() {
     reflectionText,
     statusEl,
     entriesContainer,
+    vizSwitcher,
+    vizPanels,
   } = getPageElements();
 
   let todayAnswer = null;
@@ -23,7 +25,9 @@ export function initDailyGoodRecord() {
   }
 
   function refreshEntries() {
-    renderEntries(entriesContainer, listEntries(), {
+    const entries = listEntries();
+
+    renderEntries(entriesContainer, entries, {
       onDelete(entry) {
         const confirmed = window.confirm('Delete this check-in from this device?');
         if (!confirmed) return;
@@ -32,6 +36,8 @@ export function initDailyGoodRecord() {
         refreshEntries();
       },
     });
+
+    renderVisualizations(vizSwitcher, vizPanels, entries);
   }
 
   function handleTodayAnswer(event) {

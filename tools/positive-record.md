@@ -37,6 +37,18 @@ title: Daily Good Record
   <p id="form-status" class="form-status" aria-live="polite"></p>
 </section>
 
+
+<section>
+  <h2>Progress view</h2>
+  <p class="notice">Switch between streak, calendar, and trend views of your Daily Good Records.</p>
+  <div id="viz-switcher" class="segmented" role="tablist" aria-label="Progress visualisation mode">
+    <button type="button" class="segment active" data-view="streak" role="tab" aria-selected="true">Streak</button>
+    <button type="button" class="segment" data-view="calendar" role="tab" aria-selected="false">Calendar</button>
+    <button type="button" class="segment" data-view="trend" role="tab" aria-selected="false">Chart</button>
+  </div>
+  <div id="viz-panels" class="viz-panels"></div>
+</section>
+
 <section>
   <h2>Saved check-ins</h2>
   <p class="notice">Entries are stored in your browser only and never sent anywhere.</p>
