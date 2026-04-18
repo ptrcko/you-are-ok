@@ -17,30 +17,68 @@ function dayKey(value) {
 }
 
 function isGoodDayEntry(entry) {
-  return entry.today_answer === 'no';
+  return entry.answer === 'no';
+}
+
+function isTrackedAnswer(answer) {
+  return answer === 'yes' || answer === 'no';
+}
+
+function parsePastDate(entry) {
+  if (entry.past_date_iso) return new Date(`${entry.past_date_iso}T00:00:00`);
+  if (!entry.past_date) return null;
+
+  const parsed = new Date(entry.past_date);
+  if (Number.isNaN(parsed.getTime())) return null;
+  return parsed;
+}
+
+function toDailyObservations(entries) {
+  const observations = [];
+
+  entries.forEach((entry) => {
+    const createdTimestamp = entry.createdAt || entry.updatedAt;
+    if (createdTimestamp && isTrackedAnswer(entry.today_answer)) {
+      observations.push({
+        answer: entry.today_answer,
+        observedAt: createdTimestamp,
+      });
+    }
+
+    const pastDate = parsePastDate(entry);
+    if (pastDate && isTrackedAnswer(entry.past_answer)) {
+      observations.push({
+        answer: entry.past_answer,
+        observedAt: pastDate.toISOString(),
+      });
+    }
+  });
+
+  return observations;
 }
 
 function getLatestPerDay(entries) {
+  const observations = toDailyObservations(entries);
   const map = new Map();
-  entries.forEach((entry) => {
-    const timestamp = entry.createdAt || entry.updatedAt;
+  observations.forEach((entry) => {
+    const timestamp = entry.observedAt;
     if (!timestamp) return;
     const key = dayKey(timestamp);
     const existing = map.get(key);
     const entryTime = new Date(timestamp).getTime();
-    const existingTime = existing ? new Date(existing.createdAt || existing.updatedAt || 0).getTime() : -Infinity;
+    const existingTime = existing ? new Date(existing.observedAt || 0).getTime() : -Infinity;
     if (!existing || entryTime >= existingTime) {
       map.set(key, entry);
     }
   });
   return Array.from(map.values()).sort(
-    (a, b) => new Date(a.createdAt || a.updatedAt || 0) - new Date(b.createdAt || b.updatedAt || 0),
+    (a, b) => new Date(a.observedAt || 0) - new Date(b.observedAt || 0),
   );
 }
 
 function calculateGoodStreak(entries) {
   const uniqueByDay = getLatestPerDay(entries).sort(
-    (a, b) => new Date(b.createdAt || b.updatedAt || 0) - new Date(a.createdAt || a.updatedAt || 0),
+    (a, b) => new Date(b.observedAt || 0) - new Date(a.observedAt || 0),
   );
 
   let streak = 0;
@@ -68,7 +106,7 @@ function createTrendSvg(entries) {
   const points = uniqueByDay.map((entry, index) => {
     if (isGoodDayEntry(entry)) totalGood += 1;
     const ratio = totalGood / (index + 1);
-    return { ratio, label: new Date(entry.createdAt || entry.updatedAt || Date.now()).toLocaleDateString() };
+    return { ratio, label: new Date(entry.observedAt || Date.now()).toLocaleDateString() };
   });
 
   const stepX = (width - padding * 2) / (points.length - 1);
@@ -108,7 +146,7 @@ function createCalendarMarkup(entries) {
   start.setDate(today.getDate() - 41);
 
   const latestByDay = new Map(
-    getLatestPerDay(entries).map((entry) => [dayKey(entry.createdAt || entry.updatedAt), entry]),
+    getLatestPerDay(entries).map((entry) => [dayKey(entry.observedAt), entry]),
   );
 
   const cells = [];
@@ -200,22 +238,23 @@ export function renderVisualizations(switcher, panelsEl, entries) {
   if (!switcher || !panelsEl) return;
 
   const streak = calculateGoodStreak(entries);
-  const total = entries.length;
-  const goodCount = entries.filter(isGoodDayEntry).length;
+  const allObservations = toDailyObservations(entries).filter((entry) => isTrackedAnswer(entry.answer));
+  const total = allObservations.length;
+  const goodCount = allObservations.filter(isGoodDayEntry).length;
   const rate = total ? Math.round((goodCount / total) * 100) : 0;
 
   panelsEl.innerHTML = `
     <section class="viz-panel" data-panel="streak">
       <p class="streak-count">${streak}</p>
-      <p class="streak-copy">Current good-day streak</p>
-      <p class="notice">A good day is when you answered “No” to “Did anything bad happen today?”.</p>
+      <p class="streak-copy">Current good-day streak (today + past-day answers)</p>
+      <p class="notice">A good day is when you answered “No” to either check-in question.</p>
     </section>
     <section class="viz-panel" data-panel="calendar" hidden>
       ${createCalendarMarkup(entries)}
     </section>
     <section class="viz-panel" data-panel="trend" hidden>
       ${createTrendSvg(entries)}
-      <p class="notice">Overall good-day ratio: <strong>${rate}%</strong> (${goodCount}/${total || 0}).</p>
+      <p class="notice">Overall good-day ratio across today and past-day answers: <strong>${rate}%</strong> (${goodCount}/${total || 0}).</p>
     </section>
   `;
 
