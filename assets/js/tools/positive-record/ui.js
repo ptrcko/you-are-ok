@@ -148,7 +148,6 @@ function createCalendarMarkup(entries) {
 function renderSwitcher(panels, defaultKey = 'streak') {
   const { switcher, content } = panels;
   const buttons = Array.from(switcher.querySelectorAll('button[data-view]'));
-  const views = Array.from(content.querySelectorAll('[data-panel]'));
 
   function setView(view) {
     buttons.forEach((button) => {
@@ -157,9 +156,12 @@ function renderSwitcher(panels, defaultKey = 'streak') {
       button.setAttribute('aria-selected', String(active));
     });
 
+    const views = Array.from(content.querySelectorAll('[data-panel]'));
     views.forEach((panel) => {
       panel.hidden = panel.dataset.panel !== view;
     });
+
+    switcher.dataset.activeView = view;
   }
 
   switcher.addEventListener('click', (event) => {
@@ -168,7 +170,7 @@ function renderSwitcher(panels, defaultKey = 'streak') {
     setView(button.dataset.view);
   });
 
-  setView(defaultKey);
+  setView(switcher.dataset.activeView || defaultKey);
 }
 
 export function getPageElements() {
