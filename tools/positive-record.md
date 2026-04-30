@@ -12,9 +12,10 @@ title: Daily Good Record
   </div>
 </section>
 
-<section>
+<section id="today-section">
   <h2>Today</h2>
   <p id="today-question" class="question-text">Did anything bad happen today?</p>
+  <p class="notice">Selecting an option saves immediately after you answer the past-day question.</p>
   <div id="today-options" class="form-actions" role="group" aria-labelledby="today-question">
     <button type="button" data-answer="yes">Yes</button>
     <button type="button" data-answer="no" class="secondary">No</button>
@@ -25,6 +26,7 @@ title: Daily Good Record
   <h2>Past day</h2>
   <p id="past-question" class="question-text"></p>
   <p id="past-date-note" class="date-summary-chip" aria-live="polite" hidden></p>
+  <button type="button" id="backfill-cancel" class="secondary" hidden>Cancel backfill</button>
   <div id="past-options" class="form-actions" role="group" aria-labelledby="past-question">
     <button type="button" data-answer="yes">Yes</button>
     <button type="button" data-answer="no" class="secondary">No</button>
