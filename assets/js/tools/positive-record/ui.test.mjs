@@ -40,3 +40,22 @@ test('calendar exposes selectable unanswered days in the past', () => {
   assert.match(markup, /data-missed-date=/);
   assert.ok(unansweredByKey.size > 0);
 });
+
+test('calendar day mapping uses local past_date_iso without UTC shift', () => {
+  const now = new Date();
+  const yesterday = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
+  const isoDay = `${yesterday.getFullYear()}-${String(yesterday.getMonth() + 1).padStart(2, '0')}-${String(
+    yesterday.getDate(),
+  ).padStart(2, '0')}`;
+
+  const { markup } = createCalendarMarkup([
+    {
+      today_answer: null,
+      past_answer: 'yes',
+      past_date_iso: isoDay,
+      createdAt: now.toISOString(),
+    },
+  ]);
+
+  assert.match(markup, /calendar-cell tough remembered-log/);
+});

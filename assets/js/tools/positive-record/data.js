@@ -60,7 +60,7 @@ export function createEntry({ todayAnswer, pastAnswer, pastDate }) {
   return {
     id: createLocalId(),
     type: ENTRY_TYPE,
-    today_answer: todayAnswer,
+    today_answer: todayAnswer ?? null,
     past_answer: pastAnswer,
     past_date: pastDate,
     past_date_iso: pastDateIso,

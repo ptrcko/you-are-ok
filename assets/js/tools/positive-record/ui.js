@@ -8,6 +8,7 @@ function formatAnswer(value) {
   if (value === 'yes') return 'Yes';
   if (value === 'no') return 'No';
   if (value === 'i_dont_remember') return 'I don’t remember';
+  if (!value) return 'Not answered';
   return value;
 }
 
@@ -140,10 +141,12 @@ export function createCalendarMarkup(entries, offsetBlocks = 0) {
 
 export function getPageElements() {
   return {
+    todaySection: document.querySelector('#today-section'),
     todayOptions: document.querySelector('#today-options'),
     pastSection: document.querySelector('#past-section'),
     pastQuestion: document.querySelector('#past-question'),
     pastDateNote: document.querySelector('#past-date-note'),
+    backfillCancel: document.querySelector('#backfill-cancel'),
     pastOptions: document.querySelector('#past-options'),
     reflectionSection: document.querySelector('#reflection-section'),
     reviewDateEl: document.querySelector('#review-date'),
