@@ -16,6 +16,14 @@ function dayKey(value) {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
 }
 
+export function isRememberedLogDate(value) {
+  const observed = new Date(value);
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const observedDay = new Date(observed.getFullYear(), observed.getMonth(), observed.getDate());
+  return observedDay.getTime() < today.getTime();
+}
+
 function isGoodDayEntry(entry) {
   return entry.answer === 'no';
 }
@@ -42,6 +50,7 @@ function toDailyObservations(entries) {
       observations.push({
         answer: entry.today_answer,
         observedAt: createdTimestamp,
+        isRememberedLog: false,
       });
     }
 
@@ -50,6 +59,7 @@ function toDailyObservations(entries) {
       observations.push({
         answer: entry.past_answer,
         observedAt: pastDate.toISOString(),
+        isRememberedLog: isRememberedLogDate(pastDate),
       });
     }
   });
@@ -140,7 +150,7 @@ function createTrendSvg(entries) {
   `;
 }
 
-function createCalendarMarkup(entries) {
+export function createCalendarMarkup(entries) {
   const today = new Date();
   const start = new Date(today);
   start.setDate(today.getDate() - 41);
@@ -162,11 +172,17 @@ function createCalendarMarkup(entries) {
     let label = `${date.toLocaleDateString()}: no check-in`;
     if (entry) {
       state = isGoodDayEntry(entry) ? 'good' : 'tough';
-      label = `${date.toLocaleDateString()}: ${isGoodDayEntry(entry) ? 'good day' : 'tough day'}`;
+      const rememberedText = entry.isRememberedLog ? ', remembered log' : '';
+      label = `${date.toLocaleDateString()}: ${isGoodDayEntry(entry) ? 'good day' : 'tough day'}${rememberedText}`;
     }
 
+    const rememberedClass = entry?.isRememberedLog ? ' remembered-log' : '';
+    const rememberedA11y = entry?.isRememberedLog
+      ? '<span class="sr-only">Remembered log.</span>'
+      : '';
+
     cells.push(
-      `<li class="calendar-cell ${state}" title="${label}" aria-label="${label}">${date.getDate()}</li>`,
+      `<li class="calendar-cell ${state}${rememberedClass}" title="${label}" aria-label="${label}">${date.getDate()}${rememberedA11y}</li>`,
     );
   }
 
@@ -177,6 +193,7 @@ function createCalendarMarkup(entries) {
       <p class="calendar-legend">
         <span><i class="legend-dot good"></i> Good day</span>
         <span><i class="legend-dot tough"></i> Tough day</span>
+        <span><i class="legend-dot remembered"></i> Remembered log</span>
         <span><i class="legend-dot empty"></i> No check-in</span>
       </p>
     </div>
@@ -216,6 +233,7 @@ export function getPageElements() {
     todayOptions: document.querySelector('#today-options'),
     pastSection: document.querySelector('#past-section'),
     pastQuestion: document.querySelector('#past-question'),
+    pastDateNote: document.querySelector('#past-date-note'),
     pastOptions: document.querySelector('#past-options'),
     reflectionSection: document.querySelector('#reflection-section'),
     reviewDateEl: document.querySelector('#review-date'),
@@ -247,6 +265,13 @@ export function renderReviewDate(reviewDateEl, dateText, isRemembered) {
   reviewDateEl.innerHTML = isRemembered
     ? `Check-in date: <strong>${dateText}</strong> <span class="entry-type-tag">Remembered</span>`
     : `Check-in date: <strong>${dateText}</strong>`;
+export function setPastDateNote(noteEl, { dateText, isRememberedLog }) {
+  if (!noteEl) return;
+  noteEl.hidden = false;
+  noteEl.className = `date-summary-chip${isRememberedLog ? ' remembered-log' : ''}`;
+  noteEl.textContent = isRememberedLog
+    ? `Remembered log · ${dateText}`
+    : `Check-in date · ${dateText}`;
 }
 
 export function setStatus(statusEl, message) {
@@ -320,7 +345,12 @@ export function renderEntries(container, entries, { onDelete }) {
 
     const rows = [
       ['Today', formatAnswer(entry.today_answer)],
-      [entry.past_date ? `Past day (${entry.past_date})` : 'Past day', formatAnswer(entry.past_answer)],
+      [
+        entry.past_date
+          ? `Past day (${entry.past_date})${isRememberedLogDate(entry.past_date_iso || entry.past_date) ? ' · Remembered log' : ''}`
+          : 'Past day',
+        formatAnswer(entry.past_answer),
+      ],
     ];
 
     rows.forEach(([label, value]) => {

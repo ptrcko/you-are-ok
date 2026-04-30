@@ -25,6 +25,7 @@ title: Daily Good Record
   <h2>Past day</h2>
   <p id="past-question" class="question-text"></p>
   <p id="submit-helper" class="notice"></p>
+  <p id="past-date-note" class="date-summary-chip" aria-live="polite" hidden></p>
   <div id="past-options" class="form-actions" role="group" aria-labelledby="past-question">
     <button type="button" data-answer="yes">Yes</button>
     <button type="button" data-answer="no" class="secondary">No</button>

@@ -523,6 +523,26 @@ button:hover {
   color: var(--muted);
 }
 
+.date-summary-chip {
+  display: inline-flex;
+  align-items: center;
+  margin: 0.45rem 0 0;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  background: #f8f8f6;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.date-summary-chip.remembered-log {
+  border-color: #5d3fd3;
+  box-shadow: 0 0 0 2px rgba(93, 63, 211, 0.35);
+  color: #2f2170;
+  background: #f3f0ff;
+}
+
 .entry-list {
   list-style: none;
   padding: 0;
@@ -1042,6 +1062,10 @@ button:hover {
   background: #f8f8f6;
 }
 
+.calendar-cell.remembered-log {
+  box-shadow: 0 0 0 2px #5d3fd3;
+}
+
 .calendar-legend {
   margin: 0;
   display: flex;
@@ -1073,6 +1097,41 @@ button:hover {
 
 .legend-dot.empty {
   background: #f8f8f6;
+}
+
+.legend-dot.remembered {
+  background: #f3f0ff;
+  border-color: #5d3fd3;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-color-scheme: dark) {
+  .date-summary-chip.remembered-log {
+    border-color: #b6a3ff;
+    box-shadow: 0 0 0 2px rgba(182, 163, 255, 0.42);
+    color: #efe9ff;
+    background: #2d2650;
+  }
+
+  .calendar-cell.remembered-log {
+    box-shadow: 0 0 0 2px #b6a3ff;
+  }
+
+  .legend-dot.remembered {
+    background: #2d2650;
+    border-color: #b6a3ff;
+  }
 }
 
 .trend-chart {
