@@ -1056,16 +1056,22 @@ button:hover {
   margin: 0;
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
-  gap: 0.4rem;
+  gap: clamp(0.25rem, 1.4vw, 0.4rem);
 }
 
 .calendar-cell {
-  min-height: 2.1rem;
+  aspect-ratio: 1 / 1.25;
+  min-height: 0;
   border-radius: 8px;
   border: 1px solid var(--border);
-  display: grid;
-  place-items: center;
-  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  font-size: clamp(0.78rem, 3.2vw, 0.95rem);
+  text-align: center;
+  padding: 0;
+  overflow: hidden;
   color: var(--muted);
 }
 
@@ -1127,6 +1133,37 @@ button:hover {
 .legend-dot.remembered {
   background: #f3f0ff;
   border-color: #5d3fd3;
+}
+
+@media (max-width: 480px) {
+  .calendar-cell {
+    border-radius: 7px;
+    font-size: clamp(0.8rem, 4vw, 0.95rem);
+  }
+
+  .calendar-caption {
+    font-size: 0.95rem;
+  }
+
+  .calendar-legend {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.55rem 0.75rem;
+    font-size: 0.85rem;
+    line-height: 1.2;
+  }
+
+  .calendar-legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    white-space: nowrap;
+  }
+
+  .legend-dot {
+    margin-right: 0;
+    flex: 0 0 auto;
+  }
 }
 
 .sr-only {
