@@ -238,7 +238,6 @@ export function getPageElements() {
     reflectionSection: document.querySelector('#reflection-section'),
     reviewDateEl: document.querySelector('#review-date'),
     reflectionText: document.querySelector('#reflection-text'),
-    submitHelperEl: document.querySelector('#submit-helper'),
     statusEl: document.querySelector('#form-status'),
     entriesContainer: document.querySelector('#entries'),
     vizSwitcher: document.querySelector('#viz-switcher'),
@@ -248,11 +247,6 @@ export function getPageElements() {
 
 export function setPastQuestion(pastQuestionEl, dateText) {
   pastQuestionEl.textContent = `Thinking back to ${dateText}, did anything bad happen that day?`;
-}
-
-export function setSubmitHelper(submitHelperEl, dateText) {
-  if (!submitHelperEl) return;
-  submitHelperEl.textContent = `You are saving this check-in for ${dateText}, not today.`;
 }
 
 export function renderReviewDate(reviewDateEl, dateText, isRemembered) {
