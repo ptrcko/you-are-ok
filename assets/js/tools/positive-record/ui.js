@@ -24,6 +24,38 @@ function isCurrentDayEntry(entry) {
   return entry.record_kind === 'current_day' || (entry.record_kind !== 'background_day' && entry.today_answer);
 }
 
+
+function isBackgroundDayEntry(entry) {
+  return entry.record_kind === 'background_day' || (!!entry.past_answer && !entry.today_answer);
+}
+
+function createBackgroundSummary(entries) {
+  if (!entries.length) {
+    return '<p class="notice">No past-day reflections saved yet.</p>';
+  }
+
+  const counts = entries.reduce(
+    (acc, entry) => {
+      const key = entry.past_answer || 'unknown';
+      acc[key] = (acc[key] || 0) + 1;
+      return acc;
+    },
+    {},
+  );
+
+  const items = Object.entries(counts)
+    .sort((a, b) => b[1] - a[1])
+    .map(([answer, count]) => `<li><strong>${count}</strong> ${formatAnswer(answer)}</li>`)
+    .join('');
+
+  return `
+    <div class="background-summary" aria-label="Past-day reflection summary">
+      <p class="notice">Past-day answers are tracked separately from current-day streak metrics.</p>
+      <ul class="summary-list">${items}</ul>
+    </div>
+  `;
+}
+
 function getLatestPerDay(entries) {
   const map = new Map();
   entries.forEach((entry) => {
@@ -204,6 +236,7 @@ export function renderVisualizations(switcher, panelsEl, entries) {
   if (!switcher || !panelsEl) return;
 
   const currentDayEntries = entries.filter(isCurrentDayEntry);
+  const backgroundEntries = entries.filter(isBackgroundDayEntry);
   const streak = calculateGoodStreak(currentDayEntries);
   const total = currentDayEntries.length;
   const goodCount = currentDayEntries.filter(isGoodDayEntry).length;
@@ -221,6 +254,7 @@ export function renderVisualizations(switcher, panelsEl, entries) {
     <section class="viz-panel" data-panel="trend" hidden>
       ${createTrendSvg(currentDayEntries)}
       <p class="notice">Overall good-day ratio: <strong>${rate}%</strong> (${goodCount}/${total || 0}).</p>
+      ${createBackgroundSummary(backgroundEntries)}
     </section>
   `;
 
