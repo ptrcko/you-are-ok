@@ -29,3 +29,7 @@ test('createEntry keeps same_day when past date is today', () => {
   assert.equal(entry.entry_type, 'same_day');
   assert.equal(entry.analytics.entry_type, 'same_day');
 });
+
+test('positive-record controller module imports without duplicate-ui import errors', async () => {
+  await assert.doesNotReject(() => import('../assets/js/tools/positive-record/controller.js'));
+});
