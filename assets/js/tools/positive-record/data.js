@@ -37,14 +37,21 @@ export function randomReflection() {
 
 export function createEntry({ todayAnswer, pastAnswer, pastDate }) {
   const parsedPastDate = pastDate ? new Date(pastDate) : null;
+  const pastDateIso =
+    parsedPastDate && !Number.isNaN(parsedPastDate.getTime()) ? parsedPastDate.toISOString().slice(0, 10) : '';
+  const todayIso = new Date().toISOString().slice(0, 10);
+  const entryType = pastDateIso && pastDateIso !== todayIso ? 'remembered' : 'same_day';
   return {
     id: createLocalId(),
     type: ENTRY_TYPE,
     today_answer: todayAnswer,
     past_answer: pastAnswer,
     past_date: pastDate,
-    past_date_iso:
-      parsedPastDate && !Number.isNaN(parsedPastDate.getTime()) ? parsedPastDate.toISOString().slice(0, 10) : '',
+    past_date_iso: pastDateIso,
+    entry_type: entryType,
+    analytics: {
+      entry_type: entryType,
+    },
     reflection: true,
   };
 }

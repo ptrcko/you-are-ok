@@ -1,4 +1,13 @@
 import { createEntry, deleteEntry, formatLongDate, listEntries, randomPastDate, randomReflection, saveEntry } from './data.js';
+import {
+  getPageElements,
+  renderEntries,
+  renderReviewDate,
+  renderVisualizations,
+  setPastQuestion,
+  setStatus,
+  setSubmitHelper,
+} from './ui.js';
 import { getPageElements, renderEntries, renderVisualizations, setPastDateNote, setPastQuestion, setStatus } from './ui.js';
 
 export function initDailyGoodRecord() {
@@ -9,7 +18,9 @@ export function initDailyGoodRecord() {
     pastDateNote,
     pastOptions,
     reflectionSection,
+    reviewDateEl,
     reflectionText,
+    submitHelperEl,
     statusEl,
     entriesContainer,
     vizSwitcher,
@@ -49,6 +60,7 @@ export function initDailyGoodRecord() {
     todayAnswer = button.dataset.answer;
     selectedPastDate = randomPastDate();
     setPastQuestion(pastQuestion, formatLongDate(selectedPastDate));
+    setSubmitHelper(submitHelperEl, formatLongDate(selectedPastDate));
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const selectedDay = new Date(
@@ -79,6 +91,7 @@ export function initDailyGoodRecord() {
     });
 
     saveEntry(entry);
+    renderReviewDate(reviewDateEl, pastDate, entry.entry_type === 'remembered');
     reflectionText.textContent = randomReflection();
     reflectionSection.hidden = false;
     setStatus(statusEl, 'Saved locally.');
