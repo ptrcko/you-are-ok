@@ -1019,6 +1019,26 @@ button:hover {
   gap: 0.7rem;
 }
 
+
+.calendar-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.calendar-select {
+  width: 100%;
+  min-height: 2.1rem;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.calendar-select:hover {
+  text-decoration: underline;
+}
 .calendar-caption {
   margin: 0;
   color: var(--muted);
