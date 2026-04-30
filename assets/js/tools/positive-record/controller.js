@@ -1,4 +1,12 @@
-import { createEntry, deleteEntry, formatLongDate, listEntries, randomReflection, saveEntry } from './data.js';
+import {
+  createEntry,
+  deleteEntry,
+  formatLongDate,
+  listEntries,
+  randomPastDate,
+  randomReflection,
+  saveEntry,
+} from './data.js';
 import {
   getPageElements,
   renderEntries,
@@ -78,7 +86,17 @@ export function initDailyGoodRecord() {
 
     todayAnswer = button.dataset.answer;
     reflectionSection.hidden = true;
-    setStatus(statusEl, 'Select a missed date from the calendar below.');
+
+    selectedPastDate = randomPastDate();
+    const formattedPastDate = formatLongDate(selectedPastDate);
+    setPastQuestion(pastQuestion, formattedPastDate);
+    setPastDateNote(pastDateNote, {
+      dateText: formattedPastDate,
+      isRememberedLog: true,
+    });
+    pastSection.hidden = false;
+
+    setStatus(statusEl, 'Answer this suggested past day, or pick a missed date from the calendar below.');
   }
 
   function handlePastAnswer(event) {

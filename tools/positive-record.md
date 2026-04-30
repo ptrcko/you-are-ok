@@ -42,7 +42,7 @@ title: Daily Good Record
 
 <section>
   <h2>Progress view</h2>
-  <p class="notice">Your streak and calendar are always shown below.</p>
+  <p class="notice">A suggested past day appears after each check-in, and you can also fill missed days from the calendar below.</p>
   <div id="viz-panels" class="viz-panels"></div>
 </section>
 
