@@ -35,11 +35,27 @@ export function randomReflection() {
   return REFLECTIONS[Math.floor(Math.random() * REFLECTIONS.length)];
 }
 
+function toLocalIsoDay(date) {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+}
+
+function parsePastDate(pastDate) {
+  if (pastDate instanceof Date) return pastDate;
+  if (typeof pastDate === 'string') {
+    const isoMatch = /^(\d{4})-(\d{2})-(\d{2})$/.exec(pastDate.trim());
+    if (isoMatch) {
+      const [, year, month, day] = isoMatch;
+      return new Date(Number(year), Number(month) - 1, Number(day));
+    }
+  }
+  return pastDate ? new Date(pastDate) : null;
+}
+
 export function createEntry({ todayAnswer, pastAnswer, pastDate }) {
-  const parsedPastDate = pastDate ? new Date(pastDate) : null;
+  const parsedPastDate = parsePastDate(pastDate);
   const pastDateIso =
-    parsedPastDate && !Number.isNaN(parsedPastDate.getTime()) ? parsedPastDate.toISOString().slice(0, 10) : '';
-  const todayIso = new Date().toISOString().slice(0, 10);
+    parsedPastDate && !Number.isNaN(parsedPastDate.getTime()) ? toLocalIsoDay(parsedPastDate) : '';
+  const todayIso = toLocalIsoDay(new Date());
   const entryType = pastDateIso && pastDateIso !== todayIso ? 'remembered' : 'same_day';
   return {
     id: createLocalId(),
