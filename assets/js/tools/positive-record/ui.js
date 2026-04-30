@@ -265,6 +265,8 @@ export function renderReviewDate(reviewDateEl, dateText, isRemembered) {
   reviewDateEl.innerHTML = isRemembered
     ? `Check-in date: <strong>${dateText}</strong> <span class="entry-type-tag">Remembered</span>`
     : `Check-in date: <strong>${dateText}</strong>`;
+}
+
 export function setPastDateNote(noteEl, { dateText, isRememberedLog }) {
   if (!noteEl) return;
   noteEl.hidden = false;
