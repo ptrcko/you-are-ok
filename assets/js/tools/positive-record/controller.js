@@ -1,11 +1,12 @@
 import { createEntry, deleteEntry, formatLongDate, listEntries, randomPastDate, randomReflection, saveEntry } from './data.js';
-import { getPageElements, renderEntries, renderVisualizations, setPastQuestion, setStatus } from './ui.js';
+import { getPageElements, renderEntries, renderVisualizations, setPastDateNote, setPastQuestion, setStatus } from './ui.js';
 
 export function initDailyGoodRecord() {
   const {
     todayOptions,
     pastSection,
     pastQuestion,
+    pastDateNote,
     pastOptions,
     reflectionSection,
     reflectionText,
@@ -22,6 +23,7 @@ export function initDailyGoodRecord() {
     todayAnswer = null;
     selectedPastDate = null;
     pastSection.hidden = true;
+    if (pastDateNote) pastDateNote.hidden = true;
   }
 
   function refreshEntries() {
@@ -47,6 +49,17 @@ export function initDailyGoodRecord() {
     todayAnswer = button.dataset.answer;
     selectedPastDate = randomPastDate();
     setPastQuestion(pastQuestion, formatLongDate(selectedPastDate));
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const selectedDay = new Date(
+      selectedPastDate.getFullYear(),
+      selectedPastDate.getMonth(),
+      selectedPastDate.getDate(),
+    );
+    setPastDateNote(pastDateNote, {
+      dateText: formatLongDate(selectedPastDate),
+      isRememberedLog: selectedDay.getTime() < today.getTime(),
+    });
     pastSection.hidden = false;
     reflectionSection.hidden = true;
     setStatus(statusEl, '');
