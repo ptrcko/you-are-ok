@@ -1,4 +1,12 @@
-import { createEntry, deleteEntry, formatLongDate, listEntries, randomPastDate, randomReflection, saveEntry } from './data.js';
+import {
+  createEntry,
+  deleteEntry,
+  formatLongDate,
+  listEntries,
+  randomPastDate,
+  randomReflection,
+  saveEntry,
+} from './data.js';
 import {
   getPageElements,
   renderEntries,
@@ -21,12 +29,12 @@ export function initDailyGoodRecord() {
     reflectionText,
     statusEl,
     entriesContainer,
-    vizSwitcher,
     vizPanels,
   } = getPageElements();
 
   let todayAnswer = null;
   let selectedPastDate = null;
+  let calendarOffsetBlocks = 0;
 
   function resetFlow() {
     todayAnswer = null;
@@ -48,7 +56,28 @@ export function initDailyGoodRecord() {
       },
     });
 
-    renderVisualizations(vizSwitcher, vizPanels, entries);
+    renderVisualizations(vizPanels, entries, {
+      offsetBlocks: calendarOffsetBlocks,
+      onSelectDate(date) {
+        selectedPastDate = date;
+        const formattedPastDate = formatLongDate(selectedPastDate);
+        setPastQuestion(pastQuestion, formattedPastDate);
+        setPastDateNote(pastDateNote, {
+          dateText: formattedPastDate,
+          isRememberedLog: true,
+        });
+        pastSection.hidden = false;
+      },
+      onNavigate(direction) {
+        calendarOffsetBlocks += direction;
+        if (calendarOffsetBlocks < 0) calendarOffsetBlocks = 0;
+        refreshEntries();
+      },
+      onResetView() {
+        calendarOffsetBlocks = 0;
+        refreshEntries();
+      },
+    });
   }
 
   function handleTodayAnswer(event) {
@@ -56,23 +85,18 @@ export function initDailyGoodRecord() {
     if (!button) return;
 
     todayAnswer = button.dataset.answer;
+    reflectionSection.hidden = true;
+
     selectedPastDate = randomPastDate();
     const formattedPastDate = formatLongDate(selectedPastDate);
     setPastQuestion(pastQuestion, formattedPastDate);
-    const now = new Date();
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    const selectedDay = new Date(
-      selectedPastDate.getFullYear(),
-      selectedPastDate.getMonth(),
-      selectedPastDate.getDate(),
-    );
     setPastDateNote(pastDateNote, {
       dateText: formattedPastDate,
-      isRememberedLog: selectedDay.getTime() < today.getTime(),
+      isRememberedLog: true,
     });
     pastSection.hidden = false;
-    reflectionSection.hidden = true;
-    setStatus(statusEl, '');
+
+    setStatus(statusEl, 'Answer this suggested past day, or pick a missed date from the calendar below.');
   }
 
   function handlePastAnswer(event) {

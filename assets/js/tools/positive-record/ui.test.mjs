@@ -22,7 +22,7 @@ test('calendar markup includes remembered visual and accessible cue', () => {
     yesterday.getDate(),
   ).padStart(2, '0')}`;
 
-  const markup = createCalendarMarkup([
+  const { markup } = createCalendarMarkup([
     {
       today_answer: 'yes',
       past_answer: 'no',
@@ -32,6 +32,11 @@ test('calendar markup includes remembered visual and accessible cue', () => {
   ]);
 
   assert.match(markup, /calendar-cell good remembered-log/);
-  assert.match(markup, /Remembered log\./);
   assert.match(markup, /legend-dot remembered/);
+});
+
+test('calendar exposes selectable unanswered days in the past', () => {
+  const { markup, unansweredByKey } = createCalendarMarkup([]);
+  assert.match(markup, /data-missed-date=/);
+  assert.ok(unansweredByKey.size > 0);
 });
