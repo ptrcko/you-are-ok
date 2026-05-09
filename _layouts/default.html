@@ -5,15 +5,31 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{ page.title | default: site.title }}</title>
   <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+  <script type="module" src="{{ '/assets/js/app.js' | relative_url }}"></script>
 </head>
 <body>
   <header>
-    <nav aria-label="Primary">
-      <p class="nav-title">{{ site.title }}</p>
-      <ul class="nav-links">
-        <li><a href="{{ '/' | relative_url }}">Home</a></li>
-        <li><a href="#tools">Tools</a></li>
-      </ul>
+    <nav aria-label="Primary" class="menu-shell">
+      <a class="nav-title" href="{{ '/' | relative_url }}">{{ site.title }}</a>
+      <button type="button" class="menu-toggle" aria-expanded="false" aria-controls="site-menu">☰ Menu</button>
+      <div id="site-menu" class="site-menu" hidden>
+        <a href="{{ '/' | relative_url }}">Home</a>
+        <a href="{{ '/tools/' | relative_url }}">All tools</a>
+        <a href="{{ '/tools/brief-mood-survey/' | relative_url }}">Brief Mood Survey</a>
+        <a href="{{ '/tools/thought-record/' | relative_url }}">Thought Record</a>
+        <a href="{{ '/tools/catastrophising-check-in/' | relative_url }}">Catastrophising Check-In</a>
+        <a href="{{ '/tools/story/' | relative_url }}">Story</a>
+        <a href="{{ '/tools/cognitive-distortion-identification/' | relative_url }}">Cognitive Distortion Identification</a>
+        <a href="{{ '/tools/cognitive-distortions/' | relative_url }}">Cognitive Distortions Log</a>
+        <a href="{{ '/tools/cost-benefit-analysis/' | relative_url }}">Cost–Benefit Analysis</a>
+        <a href="{{ '/tools/paradoxical-cost-benefit-analysis/' | relative_url }}">Paradoxical Cost–Benefit Analysis</a>
+        <a href="{{ '/tools/positive-record/' | relative_url }}">Daily Good Record</a>
+        <a href="{{ '/tools/anxiety-profile/' | relative_url }}">Anxiety Profile</a>
+        <a href="{{ '/tools/fear-hierarchy/' | relative_url }}">Fear Hierarchy</a>
+        <a href="{{ '/tools/exposure-log/' | relative_url }}">Exposure Log</a>
+        <a href="{{ '/tools/phobia-log/' | relative_url }}">Phobia Log</a>
+        <a href="{{ '/tools/relapse-awareness-log/' | relative_url }}">Relapse Awareness Log</a>
+      </div>
     </nav>
   </header>
 
