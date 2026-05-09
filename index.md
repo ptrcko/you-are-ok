@@ -26,3 +26,14 @@ title: You are ok
     <p>In your browser on this device only; clearing browser data removes it.</p>
   </details>
 </section>
+
+
+<section>
+  <h2>Last active</h2>
+  <p id="last-active-note">Last active: loading…</p>
+</section>
+
+<section>
+  <h2>Global Activity Calendar</h2>
+  <div id="global-activity-calendar"></div>
+</section>

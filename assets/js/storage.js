@@ -1,6 +1,7 @@
-// Shared storage layer for all tools. Keeps the single data container and
-// provides type-aware helpers so each tool only touches its own entries.
+import { runMigrations } from './migrations/run-migrations.js';
+
 const STORAGE_KEY = 'you-are-ok:data';
+const BACKUP_KEY = 'you-are-ok:data:backup';
 
 function baseShape(data) {
   return {
@@ -12,15 +13,30 @@ function baseShape(data) {
   };
 }
 
+function saveLastActivity(meta, entry, action) {
+  return {
+    ...meta,
+    lastActivity: {
+      entryId: entry?.id,
+      entryType: entry?.type,
+      action,
+      occurredAt: new Date().toISOString(),
+      summary: entry?.type,
+    },
+  };
+}
+
 export function loadData() {
   const raw = localStorage.getItem(STORAGE_KEY);
-  if (!raw) {
-    return baseShape({});
-  }
-
+  if (!raw) return baseShape({});
   try {
     const parsed = JSON.parse(raw);
-    return baseShape(parsed);
+    const migrated = runMigrations(parsed);
+    if (JSON.stringify(parsed) !== JSON.stringify(migrated)) {
+      localStorage.setItem(BACKUP_KEY, raw);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(migrated));
+    }
+    return baseShape(migrated);
   } catch (error) {
     console.error('Unable to read stored data', error);
     return baseShape({});
@@ -30,17 +46,14 @@ export function loadData() {
 function withMeta(data) {
   const now = new Date().toISOString();
   const meta = { ...data.meta };
-
-  if (!meta.schemaVersion) {
-    meta.schemaVersion = '1.0.0';
-  }
-  if (!meta.createdAt) {
-    meta.createdAt = now;
-  }
-
+  if (!meta.schemaVersion) meta.schemaVersion = '1.1.0';
+  if (!meta.createdAt) meta.createdAt = now;
   meta.lastUpdatedAt = now;
-
   return { ...data, meta };
+}
+
+export function getLastActivity() {
+  return loadData().meta.lastActivity || null;
 }
 
 export function saveData(data) {
@@ -49,78 +62,29 @@ export function saveData(data) {
   return next;
 }
 
-export function listEntriesByType(type) {
-  const data = loadData();
-  return Object.values(data.entries).filter((entry) => entry.type === type && entry.deleted !== true);
-}
-
-export function getEntry(id) {
-  const data = loadData();
-  if (!data.entries[id]) return null;
-  return data.entries[id];
-}
+export function listEntriesByType(type) { return Object.values(loadData().entries).filter((entry) => entry.type === type && entry.deleted !== true); }
+export function getEntry(id) { return loadData().entries[id] || null; }
 
 export function upsertEntry(entry) {
   const data = loadData();
   const now = new Date().toISOString();
   const existing = data.entries[entry.id];
-
-  const persisted = {
-    ...entry,
-    type: entry.type,
-    id: entry.id,
-    createdAt: existing?.createdAt || entry.createdAt || now,
-    updatedAt: now,
-    deleted: false,
-  };
-
+  const persisted = { ...entry, type: entry.type, id: entry.id, createdAt: existing?.createdAt || entry.createdAt || now, updatedAt: now, deleted: false };
   data.entries[entry.id] = persisted;
+  data.meta = saveLastActivity(data.meta || {}, persisted, existing ? 'updated' : 'created');
   return saveData(data).entries[entry.id];
 }
 
 export function markEntryDeleted(id) {
   const data = loadData();
-  if (!data.entries[id]) {
-    return null;
-  }
-
+  if (!data.entries[id]) return null;
   const now = new Date().toISOString();
-  data.entries[id] = {
-    ...data.entries[id],
-    deleted: true,
-    deletedAt: now,
-    updatedAt: now,
-  };
-
+  data.entries[id] = { ...data.entries[id], deleted: true, deletedAt: now, updatedAt: now };
+  data.meta = saveLastActivity(data.meta || {}, data.entries[id], 'deleted');
   saveData(data);
   return data.entries[id];
 }
 
-// Returns a scoped set of helpers for a specific entry type. This protects
-// tools from mutating or reading data that does not belong to them.
 export function createEntryStore(entryType) {
-  return {
-    list() {
-      return listEntriesByType(entryType);
-    },
-
-    get(id) {
-      const entry = getEntry(id);
-      if (!entry || entry.type !== entryType) return null;
-      return entry;
-    },
-
-    save(entry) {
-      const prepared = { ...entry, type: entryType };
-      return upsertEntry(prepared);
-    },
-
-    remove(id) {
-      const existing = getEntry(id);
-      if (!existing || existing.type !== entryType) {
-        return null;
-      }
-      return markEntryDeleted(id);
-    },
-  };
+  return { list() { return listEntriesByType(entryType); }, get(id) { const entry = getEntry(id); if (!entry || entry.type !== entryType) return null; return entry; }, save(entry) { return upsertEntry({ ...entry, type: entryType }); }, remove(id) { const existing = getEntry(id); if (!existing || existing.type !== entryType) return null; return markEntryDeleted(id); } };
 }

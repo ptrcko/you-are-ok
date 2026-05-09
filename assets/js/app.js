@@ -1,3 +1,5 @@
+import { getLastActivity } from './storage.js';
+import { renderGlobalCalendar } from './tools/shared/activity-calendar.js';
 const TOOL_STORAGE_KEY = 'you-are-ok:tool-usage';
 
 const TOOLS = [
@@ -57,6 +59,19 @@ function renderTools() {
   renderList(document.querySelector('#most-used-tools'), most, 'Use tools to build your local ranking.');
   renderList(document.querySelector('#recent-tools'), recent, 'Your recently opened tools appear here.');
   renderList(allRoot, all, '');
+}
+
+
+function renderLastActive() {
+  const root = document.querySelector('#last-active-note');
+  if (!root) return;
+  const last = getLastActivity();
+  if (!last) { root.textContent = 'Last active: no entries yet.'; return; }
+  root.textContent = `Last active: ${last.entryType} — ${last.action} at ${new Date(last.occurredAt).toLocaleString()}`;
+}
+
+function renderActivityCalendar() {
+  renderGlobalCalendar(document.querySelector('#global-activity-calendar'));
 }
 
 function renderList(root, items, emptyText) {
@@ -135,6 +150,8 @@ export function initApp() {
   trackToolVisit();
   initMenu();
   renderTools();
+  renderLastActive();
+  renderActivityCalendar();
 }
 
 if (typeof window !== 'undefined' && typeof document !== 'undefined' && typeof localStorage !== 'undefined') {
