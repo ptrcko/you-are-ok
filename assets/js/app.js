@@ -84,10 +84,21 @@ export function initMenu() {
   const menu = document.querySelector('#site-menu');
   if (!button || !menu) return;
 
+  const setMenuState = (open) => {
+    button.setAttribute('aria-expanded', String(open));
+    menu.hidden = !open;
+    document.body?.classList?.toggle('menu-open', open);
+  };
+
   button.addEventListener('click', () => {
     const isOpen = button.getAttribute('aria-expanded') === 'true';
-    button.setAttribute('aria-expanded', String(!isOpen));
-    menu.hidden = isOpen;
+    setMenuState(!isOpen);
+  });
+
+  menu.addEventListener('click', (event) => {
+    if (event.target instanceof HTMLElement && event.target.matches('a')) {
+      setMenuState(false);
+    }
   });
 }
 
