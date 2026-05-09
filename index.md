@@ -16,7 +16,7 @@ title: You are ok
   <h1>A calm library of CBT-style self-reflection tools</h1>
   <p>You are ok offers practical exercises you can use quietly on mobile or desktop. Everything runs in your browser and stays on this device.</p>
   <p>Use the menu to open the full tools directory.</p>
-  <p class="notice">Citation: Inspired by <em>Feeling Good: The New Mood Therapy</em> and TEAM-CBT methods by Dr. David D. Burns.</p>
+  <p class="notice">Citation: Inspired by <a href="https://feelinggood.com/" target="_blank" rel="noopener noreferrer"><em>Feeling Good: The New Mood Therapy</em></a> and TEAM-CBT methods by Dr. David D. Burns.</p>
 </section>
 
 <section>
