@@ -90,15 +90,44 @@ export function initMenu() {
     document.body?.classList?.toggle('menu-open', open);
   };
 
+  const focusFirstMenuLink = () => {
+    const firstLink = menu.querySelector('a');
+    firstLink?.focus?.();
+  };
+
+  const closeMenu = ({ returnFocus = false } = {}) => {
+    const isOpen = button.getAttribute('aria-expanded') === 'true';
+    if (!isOpen) return;
+    setMenuState(false);
+    if (returnFocus) button.focus?.();
+  };
+
   button.addEventListener('click', () => {
     const isOpen = button.getAttribute('aria-expanded') === 'true';
-    setMenuState(!isOpen);
+    const nextOpen = !isOpen;
+    setMenuState(nextOpen);
+    if (nextOpen) focusFirstMenuLink();
   });
 
   menu.addEventListener('click', (event) => {
     if (event.target instanceof HTMLElement && event.target.matches('a')) {
       setMenuState(false);
     }
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      closeMenu({ returnFocus: true });
+    }
+  });
+
+  document.addEventListener('click', (event) => {
+    const isOpen = button.getAttribute('aria-expanded') === 'true';
+    if (!isOpen) return;
+    const target = event.target;
+    if (!(target instanceof Node)) return;
+    if (button.contains(target) || menu.contains(target)) return;
+    closeMenu({ returnFocus: true });
   });
 }
 
