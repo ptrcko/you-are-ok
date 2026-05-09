@@ -11,7 +11,10 @@
   <header>
     <nav aria-label="Primary" class="menu-shell">
       <a class="nav-title" href="{{ '/' | relative_url }}">{{ site.title }}</a>
-      <button type="button" class="menu-toggle" aria-expanded="false" aria-controls="site-menu">☰ Menu</button>
+      <button type="button" class="menu-toggle" aria-expanded="false" aria-controls="site-menu" aria-label="Toggle site menu">
+        <span class="menu-toggle__icon" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span class="menu-toggle__label">Menu</span>
+      </button>
       <div id="site-menu" class="site-menu" hidden>
         <a href="{{ '/' | relative_url }}">Home</a>
         <a href="{{ '/tools/' | relative_url }}">All tools</a>
