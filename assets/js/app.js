@@ -79,7 +79,7 @@ function renderList(root, items, emptyText) {
   });
 }
 
-function initMenu() {
+export function initMenu() {
   const button = document.querySelector('.menu-toggle');
   const menu = document.querySelector('#site-menu');
   if (!button || !menu) return;
@@ -91,6 +91,12 @@ function initMenu() {
   });
 }
 
-trackToolVisit();
-initMenu();
-renderTools();
+export function initApp() {
+  trackToolVisit();
+  initMenu();
+  renderTools();
+}
+
+if (typeof window !== 'undefined' && typeof document !== 'undefined' && typeof localStorage !== 'undefined') {
+  initApp();
+}

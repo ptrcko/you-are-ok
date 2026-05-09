@@ -1243,6 +1243,10 @@ button:hover {
   font-weight: 700;
 }
 
+.site-menu[hidden] {
+  display: none !important;
+}
+
 .site-menu {
   position: absolute;
   right: 0;
