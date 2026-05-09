@@ -1297,6 +1297,10 @@ button:hover {
   z-index: 20;
   width: min(360px, calc(100vw - 1rem));
   max-width: calc(100vw - 1rem);
+  max-height: calc(100dvh - 5rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
   background: #fff;
   border: 1px solid var(--border);
   border-radius: 12px;
