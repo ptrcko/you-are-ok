@@ -12,9 +12,9 @@ title: Brief Mood Survey
 <section>
   <h2>How to record a check-in</h2>
   <ul>
-    <li>Use numbers between 0 and 4 for each row.</li>
-    <li>Separate multiple scores with commas to keep the raw values.</li>
-    <li>Totals are stored alongside the raw scores for transparency.</li>
+    <li>Enter one score from 0 to 4 in each field.</li>
+    <li>Use whole numbers only (0, 1, 2, 3, or 4).</li>
+    <li>Totals are stored alongside raw scores for transparency.</li>
     <li>No interpretation, alerts, or comparisons are applied.</li>
   </ul>
 </section>
@@ -26,19 +26,19 @@ title: Brief Mood Survey
       <legend>Raw scores (0–4 scale)</legend>
       <label for="anxietyFeelings">Anxiety (feelings)</label>
       <input id="anxietyFeelings" name="anxietyFeelings" type="text" inputmode="decimal" autocomplete="off" required>
-      <p class="hint">Example: 1, 0, 2. Values are stored exactly as typed.</p>
+      <p class="hint">Example: 1. Enter one score from 0 to 4.</p>
 
       <label for="anxietyPhysical">Anxiety (physical)</label>
       <input id="anxietyPhysical" name="anxietyPhysical" type="text" inputmode="decimal" autocomplete="off" required>
-      <p class="hint">Example: 0, 1. Use commas to record multiple scores.</p>
+      <p class="hint">Example: 0. Enter one score from 0 to 4.</p>
 
       <label for="depression">Depression</label>
       <input id="depression" name="depression" type="text" inputmode="decimal" autocomplete="off" required>
-      <p class="hint">Numbers only. No ranges beyond 0–4.</p>
+      <p class="hint">Example: 2. Enter one score from 0 to 4.</p>
 
       <label for="suicidalUrges">Suicidal urges</label>
       <input id="suicidalUrges" name="suicidalUrges" type="text" inputmode="decimal" autocomplete="off" required>
-      <p class="hint">Keep the same 0–4 scale. This field is stored without interpretation.</p>
+      <p class="hint">Example: 0. Use the same 0–4 scale. This field is stored without interpretation.</p>
     </fieldset>
 
     <div class="form-actions">
@@ -56,7 +56,7 @@ title: Brief Mood Survey
 </section>
 
 <section>
-  <h2>Privaccy</h2>
+  <h2>Privacy</h2>
   <ul>
     <li>Entries never leave this device; <code>assets/js/storage.js</code> writes to local storage only.</li>
     <li>Each tool reads and writes its own records through the typed entry store in <code>assets/js/storage.js</code> so data stays scoped.</li>
