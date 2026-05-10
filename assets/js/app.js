@@ -17,6 +17,7 @@ const TOOLS = [
   { path: '/tools/exposure-log/', name: 'Exposure Log', description: 'Track observations from exposures.' },
   { path: '/tools/phobia-log/', name: 'Phobia Log', description: 'Summarize one exposure attempt.' },
   { path: '/tools/relapse-awareness-log/', name: 'Relapse Awareness Log', description: 'Document setbacks and helpful responses.' },
+  { path: '/tools/sample-data/', name: 'Sample Data', description: 'Add or clear recent sample entries for all tools.' },
 ];
 
 function normalize(path) {
