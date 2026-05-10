@@ -1357,8 +1357,18 @@ button:hover {
   text-align: left;
 }
 
-.calendar-day strong {
-  color: var(--accent-strong);
+
+.calendar-day-box {
+  width: 0.8rem;
+  height: 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  display: inline-block;
+}
+
+.calendar-day-box.has-activity {
+  background: var(--accent);
+  border-color: var(--accent-strong);
 }
 
 .calendar-day.is-active {
