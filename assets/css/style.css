@@ -1339,3 +1339,29 @@ button:hover {
     min-width: 120px;
   }
 }
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 0.65rem;
+  margin-bottom: 0.9rem;
+}
+
+.calendar-day {
+  border: 1px solid var(--border);
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 0.5rem 0.65rem;
+  display: grid;
+  gap: 0.15rem;
+  text-align: left;
+}
+
+.calendar-day strong {
+  color: var(--accent-strong);
+}
+
+.calendar-day.is-active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(60, 111, 110, 0.2);
+}

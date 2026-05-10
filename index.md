@@ -29,7 +29,7 @@ title: You are ok
 
 
 <section>
-  <h2>Last active</h2>
+  <h2>Latest activity</h2>
   <p id="last-active-note">Last active: loading…</p>
 </section>
 

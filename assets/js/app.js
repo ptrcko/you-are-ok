@@ -1,5 +1,5 @@
 import { getLastActivity } from './storage.js';
-import { renderGlobalCalendar } from './tools/shared/activity-calendar.js';
+import { humanizeEntryType, renderGlobalCalendar } from './tools/shared/activity-calendar.js';
 const TOOL_STORAGE_KEY = 'you-are-ok:tool-usage';
 
 const TOOLS = [
@@ -66,8 +66,8 @@ function renderLastActive() {
   const root = document.querySelector('#last-active-note');
   if (!root) return;
   const last = getLastActivity();
-  if (!last) { root.textContent = 'Last active: no entries yet.'; return; }
-  root.textContent = `Last active: ${last.entryType} — ${last.action} at ${new Date(last.occurredAt).toLocaleString()}`;
+  if (!last) { root.textContent = 'Latest activity: no entries yet.'; return; }
+  root.textContent = `Latest activity: ${humanizeEntryType(last.entryType)} — ${last.action} at ${new Date(last.occurredAt).toLocaleString()}`;
 }
 
 function renderActivityCalendar() {
